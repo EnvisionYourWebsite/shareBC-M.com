@@ -1,0 +1,33 @@
+{
+    "name": "rcrowe/twigbridge",
+    "description": "Adds the power of Twig to Illuminate / Laravel 4",
+    "keywords": ["laravel", "twig"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rob Crowe",
+            "email": "hello@vivalacrowe.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "twig/twig": "1.12.*@stable",
+        "laravel/framework": "4.0.*"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.7.2",
+        "meido/html": "1.1.*",
+        "meido/form": "1.1.*"
+    },
+    "suggest": {
+        "twig/extensions": "1.0.*",
+        "meido/html": "1.1.*",
+        "meido/form": "1.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "TwigBridge": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}

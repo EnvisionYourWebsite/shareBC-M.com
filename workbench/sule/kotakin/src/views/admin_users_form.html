@@ -1,0 +1,254 @@
+{% extends "kotakin::admin_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="page-header">
+            {% if currentUser.inGroup('Super Admin') %}
+            <div class="browse-actions row">
+                <div class="col-lg-6">
+                    {% if user.id > 0 %}
+                    <h4 class="modal-title">{{ _('Edit "%s" Information') | format(user.name) }}</h4>
+                    {% else %}
+                    <h4 class="modal-title">{{ _('Create a new user') }}</h4>
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 align_right">
+                    <a href="{{ url_to('/admin/preference/user') }}" class="btn btn-default btn-small"><i class="glyphicon glyphicon-chevron-left"></i> {{ _('Back') }}</a>
+                    {% if user.id > 0 %}
+                    <a href="{{ url_to('/admin/preference/user/0') }}" class="btn btn-primary btn-small"><i class="glyphicon glyphicon-plus glyphicon-white"></i> {{ _('New User') }}</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <h4 class="modal-title">{{ _('Your Profile') }}</h4>
+            {% endif %}
+        </div>
+        {{ form_open({'url': url_current(), 'files': true}) }}
+            <div class="form-group{% if errors.has('name') %} has-error{% endif %}">
+                <label for="name">{{ _('Name') }}</label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" value="{{ user.name(form_getValueAttribute('name')) }}" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group{% if errors.has('email') %} has-error{% endif %}">
+                <label for="email">{{ _('Email') }}</label>
+                <div class="controls">
+                    <input type="text" id="email" name="email" value="{{ user.email(form_getValueAttribute('email')) }}" class="form-control" />
+                </div>
+            </div>
+            <hr/>
+            {% if user.id > 0 %}
+            <div class="form-group mb0">
+                <label>{{ _(' ') }}</label>
+                <div class="controls">
+                    <div class="alert alert-info">{{ _('Required if you want to change the password.') }}</div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="form-group{% if errors.has('password') %} has-error{% endif %}">
+                <label for="password">{{ _('Password') }}</label>
+                <div class="controls">
+                    <input type="password" id="password" name="password" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group{% if errors.has('confirm_password') %} has-error{% endif %}">
+                <label for="confirm-password">{{ _('Confirm Password') }}</label>
+                <div class="controls">
+                    <input type="password" id="confirm-password" name="confirm_password" class="form-control" />
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group{% if errors.has('date_format') %} has-error{% endif %}">
+                <label for="date-format">{{ _('Date Format') }}</label>
+                <div class="controls">
+                    <input type="text" id="date-format" name="date_format" value="{{ user.dateFormat(form_getValueAttribute('date_format')) }}" class="form-control" />
+                    <a href="http://php.net/manual/en/function.date.php" target="_blank" class="btn btn-info btn-small mt10">{{ _('format reference') }}</a>
+                </div>
+            </div>
+            {% if currentUser.inGroup('Super Admin') %}
+            <hr/>
+            <div class="form-group{% if errors.has('access') %} has-error{% endif %}">
+                <label for="access-level">{{ _('Access Level') }}</label>
+                <div class="controls">
+                    <select id="access-level" name="access" class="form-control">
+                        <option value="1"{% if user.group.id == 1 %} selected="selected"{% endif %}>{{ _('Super Administrator (Full Access)') }}</option>
+                        <option value="2"{% if user.group.id == 2 %} selected="selected"{% endif %}>{{ _('Administrator (Admin Access, No Preferences Access)') }}</option>
+                        <option value="3"{% if user.group.id == 3 %} selected="selected"{% endif %}>{{ _('User (Only Frontend Access)') }}</option>
+                    </select>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group{% if errors.has('max_upload') %} has-error{% endif %}">
+                <label for="max-upload">{{ _('Max. Upload Size') }}</label>
+                <div class="controls">
+                    <input type="text" id="max-upload" name="max_upload" value="{{ user.maxUploadSize(true, form_getValueAttribute('max_upload')) }}" class="form-control" />
+                    <span class="help-block">{{ _('in Bytes') }} ( <strong>php.ini</strong>: {{ page.maxFileUploadSize }} )</span>
+                </div>
+            </div>
+            <div class="form-group{% if errors.has('allowed_file') %} has-error{% endif %}">
+                <label for="allowed-file">{{ _('Allowed File') }} <a href="#type-info-modal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-question-sign"></i></a></label>
+                <div class="controls">
+                    <input type="text" id="allowed-file" name="allowed_file" value="{{ user.allowedFileTypes(form_getValueAttribute('allowed_file')) }}" class="form-control" />
+                    <a href="#type-reference-modal" class="btn btn-info btn-small mt10" role="button" data-toggle="modal">{{ _('file type reference') }}</a>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group{% if errors.has('background') %} has-error{% endif %}">
+                <label for="background">{{ _('Background') }} <a href="#background-info-modal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-question-sign"></i></a></label>
+                <div class="controls">
+                    <input type="file" id="background" name="background" accept="image/jpeg" class="form-control pull-left mr10" />
+                    <div class="clearfix">
+                        {% if user.background is not empty %}
+                        <a href="{{ url_to(user.background) }}" target="_blank" class="pull-left mt10 mr10">
+                            <img src="{{ url_to(user.background) }}" alt="" width="20" />
+                        </a>
+                        {% endif %}
+                        <span class="help-block pull-left">{{ _('max. file size') }} {{ page.maxFileUploadSize }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group{% if errors.has('slug') %} has-error{% endif %}">
+                <label for="slug">{{ _('URL') }} <a href="#url-info-modal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-question-sign"></i></a></label>
+                <div class="controls">
+                    <div class="input-group">
+                        <span class="input-group-addon input-small">{{ url_to('/') }}/</span>
+                        <input type="text" id="slug" name="slug" class="form-control input-small" value="{{ user.slug(form_getValueAttribute('slug')) }}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email-recipient">{{ _('Email Recipients') }} <a href="#email-info-modal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-question-sign"></i></a></label>
+                <div class="controls">
+                    <select id="email-recipient" name="recipients[]" class="form-control" multiple="multiple">
+                        {% for item in page.users %}
+                        {% if item.group.name != 'User' %}
+                        <option value="{{ item.id }}"{% if item.id in user.recipientUserIds %} selected="selected"{% endif %}>{{ item.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <span class="help-block">{{ _('You can choose more than one by CTRL / CMD + Click') }}</span>
+                    <a href="#" id="remove-email-recipients" class="btn btn-default btn-small mt10">{{ _('Remove selections') }}</a>
+                </div>
+            </div>
+            {% endif %}
+            <div class="form-group clearfix">
+                {% if user.id > 0 %}
+                    <button type="submit" class="btn btn-primary pull-left mr10">{{ _('Save Changes') }}</button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary pull-left mr10">{{ _('Register & Notify User') }}</button>
+                {% endif %}
+                {% if currentUser.inGroup('Super Admin') %}
+                <a href="{{ url_to('/admin/preference/user') }}" class="btn btn-default pull-left">{{ _('Cancel') }}</a>
+                {% endif %}
+                {% if user.id > 0 %}
+                    <a href="{{ url_to('/admin/preference/user/%d?action=delete') | format(user.id) }}" class="btn btn-danger pull-right ml10">{{ _('Delete') }}</a>
+                    {% if user.isActivated %}
+                    <a href="{{ url_to('/admin/preference/user/%d?action=deactivate') | format(user.id) }}" class="btn btn-default pull-right ml10">{{ _('Deactivate') }}</a>
+                    {% else %}
+                    <a href="{{ url_to('/admin/preference/user/%d?action=activate') | format(user.id) }}" class="btn btn-default pull-right ml10">{{ _('Activate') }}</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {{ form_close() }}
+    </div>
+
+    <div id="type-info-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('File Types') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ _('Define allowed file types when uploading by this user. Please split accepted extensions with a ",", in example "jpeg,png,gif,zip". If you would like to accept all types of files, leave this field empty.') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="type-reference-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('File Types Reference') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        {% for extension, item in page.fileTypes %}
+                        <li><strong>{{ extension }}</strong> ({{ item }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="background-info-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('Background Image') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ _('The background image is the image that is shown to the user in full screen at login. This is not shown in the Administrators / Super Administrators Login, but solely with the Frontend Login.') }}</p>
+                    <p style="color:red;font-weight:bold;">{{ _('The image should have the following properties:') }}</p>
+                    <ul>
+                        <li>1920x1060 Pixel</li>
+                        <li>JPG / JPEG</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="url-info-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('User URL') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ _('Each user (excluding Administrator / Super Administrators) having their own URL. User can log in with a password to Up-/Download. Allowed characters: a to z, A to Z, 0 to 9 and - (dash).') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="email-info-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('Email Recipients') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ _('Select users who will receive email notification after file uploaded from the frontend.') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

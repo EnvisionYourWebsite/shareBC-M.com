@@ -1,0 +1,8 @@
+{% extends "kotakin::install/layout" %}
+{% block body %}
+    <div class="well align_center">
+        <h3>The installation completed.</h3>
+        <p>Continue to login to the administrator area using previous registered Super Admin User.</p>
+        <a href="{{ url_to('/admin/preference/general') }}" class="btn btn-primary btn-large mt30">Login to Administrator area</a>
+    </div>
+{% endblock %}

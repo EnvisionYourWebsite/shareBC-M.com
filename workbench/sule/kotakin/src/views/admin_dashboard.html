@@ -1,0 +1,630 @@
+{% extends "kotakin::admin_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="collection-header">
+            <div class="browse-actions row mb10">
+                <div class="col-lg-6">
+                    <ul class="breadcrumb" style="background-color: #fff;">
+                        {{ page.breadcrumbs('<li class="%s"><a href="' ~ url_to('/admin%s') ~ '">%s</a></li>') }}
+                    </ul>
+                </div>
+                <div class="col-lg-6 align_right">
+                    {{ form_open({'url': url_to('/admin/search'), 'method': 'GET', 'class': 'clearfix'}) }}
+                        <div class="input-group pull-right">
+                            <input type="text" id="search" name="q" class="form-control input-small" placeholder="{{ _('Search folders & files') }}">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-default btn-small" type="button">{{ _('search') }}</button>
+                            </span>
+                        </div>
+                        <a class="btn btn-default btn-small pull-right mr5" data-toggle="modal" href="#new-folder-modal"><i class="glyphicon glyphicon-plus-sign"></i> {{ _('New folder') }}</a>
+                        <a class="btn btn-default btn-small pull-right mr5" data-toggle="modal" href="#new-file-modal"><i class="glyphicon glyphicon-upload"></i> {{ _('Upload') }}</a>
+                    {{ form_close() }}
+                </div>
+            </div>
+
+            {% if page.diskInfoAvailable %}
+            <div class="capacity-wrapper row mb10">
+                <div class="col-lg-6">
+                    <div class="progress mb10{% if page.diskUsedSpace(false, true) > 40 %} hide{% endif %}">
+                        <div class="progress-bar progress-bar-info" style="width: {{ page.diskUsedSpace(false, true) }}%"></div>
+                    </div>
+                    <div class="progress mb10{% if page.diskUsedSpace(false, true) < 41 or page.diskUsedSpace(false, true) > 60 %} hide{% endif %}">
+                        <div class="progress-bar progress-bar-success" style="width: {{ page.diskUsedSpace(false, true) }}%"></div>
+                    </div>
+                    <div class="progress mb10{% if page.diskUsedSpace(false, true) < 61 or page.diskUsedSpace(false, true) > 80 %} hide{% endif %}">
+                        <div class="progress-bar progress-bar-warning" style="width: {{ page.diskUsedSpace(false, true) }}%"></div>
+                    </div>
+                    <div class="progress mb10{% if page.diskUsedSpace(false, true) < 81 or page.diskUsedSpace(false, true) > 100 %} hide{% endif %}">
+                        <div class="progress-bar progress-bar-danger" style="width: {{ page.diskUsedSpace(false, true) }}%"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 align_right">
+                    <div class="capacity">
+                        <em>{{ _('%s of %s, %s%s free%s') | format(page.diskUsedSpace, page.diskCapacity, '<strong>', page.diskFreeSpace, '</strong>') }}</em>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        
+            <div class="collection-table-head">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox"><input type="checkbox" value="1" class="collection-checks" /></th>
+                            <th class="col-icon"></th>
+                            <th class="col-name">{{ _('Name') }}</th>
+                            <th class="col-kind">{{ _('Kind') }}</th>
+                            <th class="col-modified">{{ _('Modified') }}</th>
+                            <th class="col-action"></th>
+                        </tr>
+                    </thead>
+                </table>
+                {{ form_open({'id': 'collection-frm'}) }}
+                    <table class="table table-hover collection-actions hide">
+                        <thead>
+                            <tr>
+                                <th class="col-checkbox"><input type="checkbox" value="1" class="collection-checks" /></th>
+                                <th colspan="5" class="noPaddings">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <select class="form-control input-small noMargins noPaddings collection-action">
+                                                <option value="">{{ _('Choose a action') }}</option>
+                                                <option value="email">{{ _('Send by Email') }}</option>
+                                                <option value="delete">{{ _('Delete') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <input type="hidden" id="collection-action" name="collection_action" value="" />
+                    <input type="hidden" id="selected-items" name="items" value="" />
+                    <input type="submit" name="go" value="go" style="display:none;" />
+                {{ form_close() }}
+            </div>
+        </div>
+        <div class="collection-body">
+            <table class="table table-hover">
+                <tbody class="browse-items">
+                {% if page.collection is not empty %}
+                    {% for item in page.collection %}
+                    <tr>
+                        <td class="col-checkbox">
+                            <input type="checkbox" class="collection-item" name="collections[]" value="{{ item.id }}" />
+                        </td>
+                        <td class="col-icon">
+                            {% if item.isFile %}
+                            <img src="{{ url_to(item.object.file.thumb('50x50').permalink) }}" alt="" />
+                            {% else %}
+                            <img src="{{ url_asset('/packages/sule/kotakin/img/icons/folder.png') }}" alt="" />
+                            {% endif %}
+                        </td>
+                        <td class="col-name">
+                            {% if item.isFile %}
+                                {% if item.object.file.width > 0 %}
+                                <a href="{{ url_to(item.object.file.thumb('800x800').permalink) }}" title="{{ item.object.name | replace('"', "'") }}" class="img-swipebox">{{ item.object.name }}<img src="{{ item.object.file.thumb('25x25').permalink }}" class="hidden"></a>
+                                {% elseif item.object.file.extension in ['pdf','txt'] %}
+                                <a href="#item-view-{{ item.id }}" title="{{ item.object.name | replace('"', "'") }}" class="file-view-popup" role="button" data-toggle="modal">{{ item.object.name }}</a>
+                                {% else %}
+                                <a href="#item-pop-{{ item.id }}" title="{{ item.object.name | replace('"', "'") }}" class="file-popup" role="button" data-toggle="modal">{{ item.object.name }}</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ url_to('/admin/%s') | format(item.object.permalink) }}" title="{{ item.object.name | replace('"', "'") }}">{{ item.object.name }}</a>
+                            {% endif %}
+                        </td>
+                        <td class="col-kind">{{ item.object.kind }}</td>
+                        <td class="col-modified">
+                        {% if item.object.updatedAt > 0 %}
+                            {{ item.object.updatedAt | date(currentUser.dateFormat) }}
+                        {% endif %}
+                        </td>
+                        <td class="col-action">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-th-list"></i> <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    {% if item.isFolder %}
+                                        {% if item.object.isShared %}
+                                        <li><a href="#item-share-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-share"></i> {{ _('Shared folder options') }}</a></li>
+                                        {% else %}
+                                        <li><a href="#item-share-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-share"></i> {{ _('Invite to folder') }}</a></li>
+                                        {% endif %}
+                                    <li class="divider"></li>
+                                    {% else %}
+                                    <li><a href="#item-link-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-share"></i> {{ _('Create public link') }}</a></li>
+                                    <li class="divider"></li>
+                                    {% endif %}
+                                    <li><a href="{{ url_to('/admin/%s') | format(item.object.downloadPermalink) }}"><i class="glyphicon glyphicon-download"></i> {{ _('Download') }}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#item-delete-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> {{ _('Delete') }}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#item-rename-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i> {{ _('Rename') }}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#item-move-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-chevron-right"></i> {{ _('Move') }}</a></li>
+                                </ul>
+                            </div>
+
+                            {% if item.isFolder %}
+                            <div id="item-share-{{ item.id }}" class="modal fade" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            {% if item.object.isShared %}
+                                            <h4 class="modal-title">{{ _('Shared folder options for "%s"') | format(item.object.name) }}</h4>
+                                            {% else %}
+                                            <h4 class="modal-title">{{ _('Share "%s" with users') | format(item.object.name) }}</h4>
+                                            {% endif %}
+                                        </div>
+                                        {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                                        <div class="modal-body">
+                                            <span class="help-block">{{ _('You can choose more than one by CTRL / CMD + Click') }}</span>
+                                            <select name="users[]" multiple="multiple" class="form-control share-user-selections" style="height: 100px;">
+                                            {% for iUser in page.users %}
+                                            {% if iUser.group.name == 'User' %}
+                                            <option value="{{ iUser.id }}"{% if item.sharedWith(iUser.id) %} selected="selected"{% endif %}>{{ iUser.name }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                            </select>
+                                            <div class="clearfix">
+                                                <div class="pull-left">
+                                                    <a href="#" class="btn btn-default btn-small dash-remove-share-selections mt10" data-id="{{ item.id }}"><i class="glyphicon glyphicon-remove-sign"></i> {{ _('Remove selections') }}</a>
+                                                </div>
+                                                <div class="pull-right mt10">
+                                                    {{ _('Allow Upload?') }}
+                                                    <div class="btn-group" data-toggle="buttons">
+                                                        <label class="btn btn-success btn-small{% if not item.object.isAllowUserUpload %} active{% endif %}">
+                                                            <input type="radio" name="upload" value="0"{% if not item.object.isAllowUserUpload %} checked="checked"{% endif %}> {{ _('Disable') }}
+                                                        </label>
+                                                        <label class="btn btn-success btn-small{% if item.object.isAllowUserUpload %} active{% endif %}">
+                                                            <input type="radio" name="upload" value="1"{% if item.object.isAllowUserUpload %} checked="checked"{% endif %}> {{ _('Enable') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="item" value="{{ item.id }}" />
+                                            <input type="hidden" name="_action" value="share" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            {% if item.object.isShared %}
+                                                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-share glyphicon-white"></i> {{ _('Update') }}</button>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-share glyphicon-white"></i> {{ _('Share folder') }}</button>
+                                            {% endif %}
+                                            <a class="btn btn-default dash-reset-share-selections" data-dismiss="modal" aria-hidden="true" data-id="{{ item.id }}">{{ _('Cancel') }}</a>
+                                        </div>
+                                        {{ form_close() }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div id="item-link-{{ item.id }}" class="modal fade" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            <h4 class="modal-title">{{ _('Create a public link for "%s"') | format(item.object.name) }}</h4>
+                                        </div>
+                                        {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                                        <div class="modal-body">
+                                            <blockquote>{{ _('All fields are optional.') }}</blockquote>
+                                            <div class="form-group">
+                                                <label for="'password">{{ _('Password') }}</label>
+                                                <div class="controls">
+                                                    <input type="text" id="password" name="password" value="" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="'limit">{{ _('Limit') }}</label>
+                                                <div class="controls">
+                                                    <input type="text" id="limit" name="limit" value="" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="'valid_until_{{ item.id }}">{{ _('Valid until') }}</label>
+                                                <div class="controls">
+                                                    <input type="text" id="valid_until_{{ item.id }}" name="valid_until" value="" class="form-control valid-until" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="'description">{{ _('Description') }}</label>
+                                                <div class="controls">
+                                                    <textarea id="description" name="description" class="form-control" rows="5"></textarea>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="item" value="{{ item.id }}" />
+                                            <input type="hidden" name="_action" value="link" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-share glyphicon-white"></i> {{ _('Create') }}</button>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                                        </div>
+                                        {{ form_close() }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if item.object.file.extension in ['pdf','txt'] %}
+                            <div id="item-view-{{ item.id }}" class="modal fade view-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            <h4 class="modal-title">{{ item.object.name }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <iframe src="{{ url_to('/blank') }}" frameborder="0" class="view-iframe" data-opened="0"></iframe>
+                                            <input type="hidden" name="item" class="view-item-slug" value="{{ item.object.slug }}" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ url_to('/admin/%s') | format(item.object.downloadPermalink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-download glyphicon-white"></i> {{ _('Download') }}</a>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div id="item-pop-{{ item.id }}" class="modal fade{% if item.object.file.extension == 'mp4' %} video{% else %} pop{% endif %}-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            <h4 class="modal-title">{{ item.object.name }}</h4>
+                                        </div>
+                                        <div class="modal-body align_center">
+                                            {% if item.object.file.extension == 'mp4' %}
+                                            <video id="video-{{ item.id }}" class="video-js vjs-default-skin" controls preload="auto" width="498" height="264" poster="{{ url_asset('packages/sule/kotakin/img/mp4-clip.png') }}" data-setup='{"example_option":true}'>
+                                                <source src="{{ url_to('/admin/%s') | format(item.object.downloadPermalink) }}" type='video/mp4' />
+                                            </video>
+                                            {% else %}
+                                            <img src="{{ url_to(item.object.file.thumb('100x100').permalink) }}" alt="" class="mt30 mb10" width="100" />
+                                            <br/>
+                                            <strong>{{ item.object.kind }}</strong>
+                                            <p>{{ item.object.createdAt | date(currentUser.dateFormat) }} - {{ item.object.file.size }}</p>
+                                            {% if item.object.file.extension == 'mp3' %}
+                                            <div class="audio-preview clearfix mt30">
+                                                <audio src="{{ url_to('/admin/%s') | format(item.object.downloadPermalink) }}" preload="none" />
+                                            </div>
+                                            {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ url_to('/admin/%s') | format(item.object.downloadPermalink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-download glyphicon-white"></i> {{ _('Download') }}</a>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="item-delete-{{ item.id }}" class="modal fade" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            {% if item.isFolder %}
+                                            <h4 class="modal-title">{{ _('Delete Folder') }}</h4>
+                                            {% else %}
+                                            <h4 class="modal-title">{{ _('Delete File') }}</h4>
+                                            {% endif %}
+                                        </div>
+                                        {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                                        <div class="modal-body">
+                                            {% if item.isFolder %}
+                                            <p>{{ _('Are you sure want to delete "%s" with all folders and files in it?') | format(item.object.name) }}</p>
+                                            {% else %}
+                                            <p>{{ _('Are you sure want to delete "%s"?') | format(item.object.name) }}</p>
+                                            {% endif %}
+                                            <input type="hidden" name="item" value="{{ item.id }}" />
+                                            <input type="hidden" name="_action" value="delete" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                                            <button type="submit" class="btn btn-primary">{{ _('Continue') }}</button>
+                                        </div>
+                                        {{ form_close() }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="item-rename-{{ item.id }}" class="modal fade name-modal rename-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            {% if item.isFolder %}
+                                            <h4 class="modal-title">{{ _('Rename Folder') }}</h4>
+                                            {% else %}
+                                            <h4 class="modal-title">{{ _('Rename File') }}</h4>
+                                            {% endif %}
+                                        </div>
+                                        {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                                        <div class="modal-body">
+                                            <div class="input-group">
+                                                <span class="input-group-addon input-small"><i class="glyphicon glyphicon-pencil"></i></span>
+                                                <input type="text" name="name" class="form-control input-small" value="{{ item.object.baseName }}">
+                                            </div>
+                                            <input type="hidden" name="item" value="{{ item.id }}" />
+                                            <input type="hidden" name="_action" value="rename" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                                            <button type="submit" class="btn btn-primary">{{ _('Continue') }}</button>
+                                        </div>
+                                        {{ form_close() }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="item-move-{{ item.id }}" class="modal fade name-modal rename-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            {% if item.isFolder %}
+                                            <h4 class="modal-title">{{ _('Move Folder') }}</h4>
+                                            {% else %}
+                                            <h4 class="modal-title">{{ _('Move File') }}</h4>
+                                            {% endif %}
+                                        </div>
+                                        {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                                        <div class="modal-body mb30 pb30">
+                                            <div class="input-group">
+                                                <span class="input-group-addon input-small">to</span>
+                                                <input type="text"  class="form-control input-small move-paths" name="destination" value="" placeholder="{{ _('type folder path') }}" autocomplete="off">
+                                            </div>
+                                            <div class="alert hidden">{{ _("Could not move to it's own folder, please select another one.") }}</div>
+                                            <span class="help-block">{{ _('example:') }}<br/>{{ _('"/" (to root folder)') }}<br/>{{ _('"/a_folder_name/child_folder_name"') }}</span>
+                                            <input type="hidden" name="item" value="{{ item.id }}" />
+                                            <input type="hidden" name="path" value="{{ item.object.slug }}" />
+                                            <input type="hidden" name="_action" value="move" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                                            <button type="submit" class="btn btn-primary">{{ _('Continue') }}</button>
+                                        </div>
+                                        {{ form_close() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="alert alert-box alert-info align_center">
+                                {{ _('Empty folder') }}
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="collection-footer">
+            <div class="collection-table-foot">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox"><input type="checkbox" value="1" class="collection-checks" /></th>
+                            <th class="col-icon"></th>
+                            <th class="col-name">{{ _('Name') }}</th>
+                            <th class="col-kind">{{ _('Kind') }}</th>
+                            <th class="col-modified">{{ _('Modified') }}</th>
+                            <th class="col-action"></th>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-hover collection-actions hide">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox"><input type="checkbox" value="1" class="collection-checks" /></th>
+                            <th colspan="5" class="noPaddings">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <select class="form-control input-small noMargins noPaddings collection-action">
+                                            <option value="">{{ _('Choose a action') }}</option>
+                                            <option value="email">{{ _('Send by Email') }}</option>
+                                            <option value="delete">{{ _('Delete') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="selection-delete-modal" class="modal fade name-modal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('Delete Selection') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ _('Are you sure want to delete the selected item(s)?') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a id="cancel-delete-selection" class="btn btn-default">{{ _('Cancel') }}</a>
+                    <a id="ok-delete-selection" class="btn btn-primary">{{ _('Continue') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="new-email-modal" class="modal fade email-modal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('Send Email') }}</h4>
+                </div>
+                {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipients">{{ _('Recipients') }}</label>
+                        <div class="controls">
+                            <input type="text" id="recipients" name="recipients" value="" class="form-control" placeholder="{{ _('Email address') }}" />
+                            <span class="help-block">{{ _('Separate each email address using comma.') }}</span>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="form-group">
+                        <label for="subject">{{ _('Subject') }}</label>
+                        <div class="controls">
+                            <input type="text" id="subject" name="subject" value="" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">{{ _('Message') }}</label>
+                        <div class="controls">
+                            <textarea id="message" name="message" rows="10" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ _('Attachments') }}</label>
+                        <ul class="list-unstyled attachments">
+                            <li class="mb5 attachment-item-example hide"><img src="" alt="" class="mr5" width="20" /><span></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="collection_action" value="email" />
+                    <input type="hidden" id="email-items" name="items" value="" />
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                    <button type="submit" class="btn btn-primary">{{ _('Send') }}</button>
+                </div>
+                {{ form_close() }}
+            </div>
+        </div>
+    </div>
+
+    <div id="new-folder-modal" class="modal fade name-modal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('Create a Folder') }}</h4>
+                </div>
+                {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon input-small"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <input type="text" name="name" class="form-control input-small" placeholder="{{ _('Folder name') }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                    <button type="submit" class="btn btn-primary">{{ _('Continue') }}</button>
+                </div>
+                {{ form_close() }}
+            </div>
+        </div>
+    </div>
+
+    <div id="new-file-modal" class="modal fade" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('Upload Files') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="choose-files-intro">{{ _('Click "Choose Files" to start selecting files you want to upload.') }}</p>
+                    <!-- The table listing the files available for upload/download -->
+                    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+                </div>
+                <div class="modal-footer clearfix">
+                    <div class="fleft">{{ _('Max. upload size: %s') | format(currentUser.maxUploadSize) }}</div>
+                    <div class="file-actions fright">
+                        {{ form_open({
+                            'id': 'fileupload', 
+                            'url': url_to('/admin/upload/file'), 
+                            'files': true,
+                            'class': 'mb0'
+                        }) }}
+                            <span class="btn btn-primary fileinput-button"><i class="glyphicon glyphicon-plus glyphicon-white"></i> {{ _('Choose files') }}<input type="file" name="files[]" multiple accept="{{ currentUser.allowedMimeTypes | join('|') }}" /></span>
+                            <input type="hidden" name="folder" value="{{ page.getCurrentFolderId }}" />
+                        {{ form_close() }}
+                        <a class="btn btn-default a-close-file-modal" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                    </div>
+                </div>
+
+                <!-- The template to display files available for upload -->
+                <script id="template-upload" type="text/x-tmpl">
+                {{ '{% for (var i=0, file; file=o.files[i]; i++) { %}
+                    <tr class="template-upload fade">
+                        <td class="preview"></td>
+                        <td>
+                            <span class="name">{%=file.name%}</span><br/>
+                            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+                            {% if (!o.files.error) { %}
+                                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                    <div class="progress-bar progress-bar-success bar" style="width: 0%"></div>
+                                </div>
+                            {% } %}
+                            {% if (file.error) { %}
+                                <div><span class="label label-important">Error</span> {%=file.error%}</div>
+                            {% } %}
+                        </td>
+                        <td class="actions">
+                            {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+                                <button class="btn btn-primary start hidden">
+                                    <i class="glyphicon glyphicon-upload glyphicon-white"></i>
+                                    <span>Start</span>
+                                </button>
+                            {% } %}
+                            {% if (!i) { %}
+                                <button class="btn cancel">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            {% } %}
+                        </td>
+                    </tr>
+                {% } %}' | raw }}
+                </script>
+                <!-- The template to display files available for download -->
+                <script id="template-download" type="text/x-tmpl">
+                {{ "{% for (var i=0, file; file=o.files[i]; i++) { %}
+                    <tr class=\"template-download fade\">
+                        <td class=\"preview\">
+                            {% if (file.thumbnail_url) { %}
+                                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\" data-gallery><img src=\"{%=file.thumbnail_url%}\"></a>
+                            {% } %}
+                        </td>
+                        <td>
+                            <p class=\"name\">
+                                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\" {%=file.thumbnail_url?'data-gallery':''%}>{%=file.name%}</a>
+                            </p>
+                            <span class=\"size\">{%=o.formatFileSize(file.size)%}</span>
+                            {% if (file.error) { %}
+                                <div><span class=\"label label-important\">Error</span> {%=file.error%}</div>
+                            {% } %}
+                        </td>
+                        <td class=\"actions\">
+                            {% if (!file.error) { %}
+                            <button class=\"btn btn-danger delete\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{\"withCredentials\":true}'{% } %}>
+                                <i class=\"glyphicon glyphicon-trash glyphicon-white\"></i>
+                            </button>
+                            {% } %}
+                        </td>
+                    </tr>
+                {% } %}" | raw }}
+                </script>
+            </script>
+        </script>
+    </div>
+{% endblock %}

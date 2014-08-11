@@ -1,0 +1,12 @@
+{% extends "kotakin::user_layout" %}
+{% block body %}
+    <div class="container">
+        <div class="hero-unit align_center">
+            <h1>{{ _('Page Not Found') }} <small><font face="Tahoma" color="red">{{ _('Error 404') }}</font></small></h1>
+            <br />
+            <p>{{ _('The page you requested could not be found, either contact your webmaster or try again. Use your browsers <b>Back</b> button to navigate to the page you have prevously come from') | raw }}</p>
+            <p><b>{{ _('Or you could just press this neat little button:') }}</b></p>
+            <a href="{{ url_to('/') }}" class="btn btn-large btn-info"><i class="glyphicon glyphicon-home glyphicon-white"></i> {{ _('Take Me Home') }}</a>
+        </div>
+    </div>
+{% endblock %}

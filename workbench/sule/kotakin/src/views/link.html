@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ page.title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="Sulaeman <me@sulaeman.com>">
+
+        <!-- Le styles -->
+        <link href="{{ url_asset('packages/sule/kotakin/css/bootstrap.min.css') }}" media="screen" rel="stylesheet" />
+        <link href="{{ url_asset('packages/sule/kotakin/css/bootstrap-glyphicons.css') }}" media="screen" rel="stylesheet" />
+        <link href="{{ url_asset('packages/sule/kotakin/css/style.css') }}" media="screen" rel="stylesheet" />
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            {{ html_script('http://html5shim.googlecode.com/svn/trunk/html5.js') }}
+        <![endif]-->
+
+        <!-- Le fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-144-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-114-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-72-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-57-precomposed.ico') }}">
+        <link rel="shortcut icon" href="{{ url_to_asset('packages/sule/kotakin/ico/favicon.ico') }}">
+
+        {% if page.getMetadata is not empty %}
+            {% for item in page.getMetadata %}
+                {{ item }}
+            {% endfor %}
+        {% endif %}
+    </head>
+
+    <body>
+        <div class="top-pad visible-desktop">&nbsp;</div>
+        <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_to('/') }}">{{ page.brand }}</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 link-wrapper align_center">
+                    {% if link.unlocked %}
+                        {% if link.downloadedTimes >= link.limit and link.limit > 0 %}
+                        <div class="alert alert-error alert-block"><strong>{{ _('Max download limit reached for this file.') }}</strong></div>
+                        {% else %}
+                        <img src="{{ url_to(link.doc.file.thumb('100x100').permalink) }}" alt="" class="mt30 mb10" width="100" />
+                        <br/>
+                        <p>{{ link.doc.createdAt | date('Y-m-d H:i A') }} - {{ link.doc.file.size }}</p>
+                        {% if link.description is not empty %}
+                        <blockquote class="align_left">{{ link.description | nl2br }}</blockquote>
+                        {% endif %}
+                        <br/><a href="{{ url_to('/%s') | format(link.permalink) }}?dl=1" class="btn btn-primary mt10">{{ _('Download') }}</a>
+                        {% endif %}
+                    {% else %}
+                        {{ form_open({'url': url_current()}) }}
+                            <div class="form-group">
+                                <input type="password" name="password" class="form-control input-small" placeholder="{{ _('Password') }}">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" name="submit" class="btn btn-block btn-primary"><i class="glyphicon glyphicon-lock"></i> {{ _('Unlock') }}</button>
+                            </div>
+                        {{ form_close() }} 
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Le scripts -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery-1.10.2.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/respond.min.js') }}"></script>
+
+        {% if page.getMetadata('footer') is not empty %}
+            {% for item in page.getMetadata('footer') %}
+                {{ item }}
+            {% endfor %}
+        {% endif %}
+
+        {% if page.config('ga_code') is not empty %}
+        <!-- Google Analytics -->
+        <script>
+          var _gaq=[['_setAccount','{{ page.config('ga_code') }}'],['_trackPageview']];
+          (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+          g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+          s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+        <!-- End Google Analytics -->
+        {% endif %}
+    </body>
+</html>

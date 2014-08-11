@@ -1,0 +1,56 @@
+{% extends "kotakin::admin_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+        
+        <div class="page-header">
+            <h4 class="modal-title">{{ _('Email Template') }}</h4>
+        </div>
+        {% if templates is not empty %}
+        <ul class="nav nav-tabs">
+            {% for index, template in templates %}
+            <li{% if index == 0 %} class="active"{% endif%}><a href="#{{ template.identifier }}" data-toggle="tab">{{ _(template.title) }}</a></li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content">
+            {% for index, template in templates %}
+            <div class="tab-pane{% if index == 0 %} active{% endif%}" id="{{ template.identifier }}">
+                <blockquote class="mt10">{{ _(template.note) }}</blockquote>
+                {{ form_open({'url': url_current()}) }}
+                    <fieldset>
+                        <div class="form-group{% if errors.has('subject') %} has-error{% endif %}">
+                            <label for="'subject">{{ _('Subject') }}</label>
+                            <div class="controls">
+                                <input type="text" id="subject" name="subject" value="{{ template.subject(form_getValueAttribute('subject')) }}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group{% if errors.has('content_html') %} has-error{% endif %}">
+                            <label for="content_html">{{ _('HTML Message') }}</label>
+                            <div class="controls">
+                                <textarea id="content_html" name="content_html" rows="10" class="form-control">{{ template.html(form_getValueAttribute('content_html')) }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group{% if errors.has('content_plain') %} has-error{% endif %}">
+                            <label for="content_plain">{{ _('Plain Message') }}</label>
+                            <div class="controls">
+                                <textarea id="content_plain" name="content_plain" rows="10" class="form-control">{{ template.plain(form_getValueAttribute('content_plain')) }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <input type="hidden" id="id" name="id" value="{{ template.id }}" />
+                            <button type="submit" class="btn btn-primary pull-left">{{ _('Save Changes') }}</button>
+                            <button type="reset" class="btn btn-default pull-right">{{ _('Reset') }}</button>
+                        </div>
+                    </fieldset>
+                {{ form_close() }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Kotakin &rsaquo; ReadMe</title>
+    <link rel="stylesheet" href="readme.css" type="text/css" />
+</head>
+<body>
+<h1 id="logo" style="text-align: center">
+    Kotakin
+    <br /> Version 1.2.5
+</h1>
+
+<h1>First Things First</h1>
+<p>Kotakin was created for everyone that must constantly send files to customers or receive files from the same customers.</p>
+<p>The employee can upload files from the administration system and share it with it’s customers or create a public link for anyone.</p>
+<p>Every customer can have it’s own URL with a full screen background image and login system. In this area, the customer can upload files directly or download files provided by you.</p>
+<p>
+    <strong>Features :</strong>
+    <ul>
+        <li>Completely template-based for easy design modifications and object oriented template variables. Using Twig template engine.</li>
+        <li>Multilanguage.</li>
+        <li>Created with PHP ( Laravel 4 ) and the amazing Twitter Bootstrap version 3 – easy to modify and to understand.</li>
+        <li>Full Source Code.</li>
+        <li>SMTP / SENDMAIL / PHP MAIL Support.</li>
+        <li>Files renamed for security reasons. Original filename restored while dowloading.</li>
+        <li>Easy to use Step-By-Step installer.</li>
+        <li>Google Analytics Support.</li>
+        <li>Send Files directly by Email as Attachment.</li>
+        <li>Create Public Links ( with / without Password Protection, Download Limit, Date Limit, Message ).</li>
+        <li>Share Folders with registered Users.</li>
+        <li>Search for Folder and Files.</li>
+        <li>Beautiful Ajax Upload.</li>
+        <li>Superadmin / Admin / User roles.</li>
+        <li>Dateformat Settings.</li>
+        <li>Email Template Editor.</li>
+        <li>Preview Thumbnails.</li>
+        <li>GD and ImageMagick Support.</li>
+        <li>Direct Download of files.</li>
+        <li>Fullscreen Background can be set for each User separately.</li>
+        <li>Each User get’s it’s own URL like myappweb.com/username ( can be defined for each user ).</li>
+        <li>Each User has it’s own Login Area.</li>
+        <li>Users can upload Files directly to the Company.</li>
+        <li>Superadmin/Admin informed by Email of new Files Uploaded by a User.</li>
+        <li>User upload can be disabled.</li>
+        <li>Interface (HTML, CSS, and Javascript) Editor in browser.</li>
+        <li>Secure Public Link like myappweb.com/i/157b2102-ee92-4ce2-a715-9d6c1e07fc6d</li>
+        <li>Public Link Download Counter.</li>
+        <li>Auto disable Public Link if limits occur ( Download Counter, Date Limit ).</li>
+        <li>Console Commands that can be run as your server cron job to remove any expired and download limit reached links, with file (optional).</li>
+        <li>Disk usage capacity at admin dashboard.</li>
+        <li>Option to disable users upload in shared folder.</li>
+        <li>MP3 Preview (using <a href="http://kolber.github.io/audiojs/" target="_blank">http://kolber.github.io/audiojs/</a>)</li>
+        <li>MP4 Video Preview (using<a href="http://www.videojs.com" target="_blank"> http://www.videojs.com</a>)</li>
+    </ul>
+</p>
+
+<h1>NOTE</h1>
+<p><strong>This application only recommended to be accessed via subdomain / domain directly. You can also create a virtual host on your local computer for testing.</strong></p>
+<p><strong>Nginx Server Configuration Example:</strong> <a href="http://dl.dropboxusercontent.com/u/1550865/kotakin.sulaeman.com.nginx.conf.example.txt" target="_blank">Download</a></p>
+<p><strong>Error: SessionHandler::read(): failed: Permission denied (13)?</strong><br/>Make sure the “app/storage/” folder and all the folders inside it are writeable by PHP (using CHMOD => 0755 / 0775 / 0777)</p>
+<br/>
+
+<h1>Installation:</h1>
+<ol>
+    <li>Extract the content of kotakin.zip file to your domain / subdomain directory, in example "/path/to/mysite.com".</li>
+    <li>
+        <h3>Hosting that enable you to change the web directory:</h3>
+        <p>Log in to the control panel and navigate to the Domain manager. Edit the domain where you wish to have Kotakin run from. Change the web directory from the default /path/to/mysite.com to /path/to/mysite.com/public. The reason we do this is that some of Laravel lives outside of the root web directory. Next we need to make sure PHP is set to 5.3.x or higher.</p>
+        <h3>Hosting with no access to change the web directory:</h3>
+        <p>Move all folders and files inside the "public/" folder to the root of your web directory.</p>
+        <p>Now we need to edit our paths in index.php:</p>
+        <p>require __DIR__.'/bootstrap/autoload.php';</p>
+        <p>$app = require_once __DIR__.'/bootstrap/start.php';</p>
+        <p>And then just set the public dir in out /bootstrap/paths.php file:</p>
+        <p>'public' => __DIR__.'/..',</p>
+    </li>
+    <li>Go to the domain / subdomain where the Kotakin installed via web browser.</li>
+    <li>Follow and complete the installation steps.</li>
+</ol>
+
+<h1>Console Commands (cron jobs):</h1>
+<p>You can use following console commands manually or place them as your server cron jobs.</p>
+<p>Go to the root of Kotakin application, where you can find the "artisan" file in there, then run following commands as you prefer.</p>
+<ol>
+    <li>
+        <strong>Remove any expired link, with the file (optional)</strong>
+        <br/>
+        <pre>php artisan kotakin:removeExpiredLink</pre>
+        <pre>php artisan kotakin:removeExpiredLink --with-file="true"</pre>
+    </li>
+    <li>
+        <strong>Remove any download limit reached link, with the file (optional)</strong>
+        <br/>
+        <pre>php artisan kotakin:removeDlLimitedLink</pre>
+        <pre>php artisan kotakin:removeDlLimitedLink --with-file="true"</pre>
+    </li>
+</ol>
+
+<h1>Localization (Language):</h1>
+<ol>
+    <li>Download the <strong>Poedit</strong> from http://www.poedit.net/.</li>
+    <li>Edit file "workbench/sule/kotakin/src/lang/kotakin.pot" file using a text editor.</li>
+    <li>Change the all the "msgstr" values with language translation, leave the "msgid" values.</li>
+    <li>Save the file.</li>
+    <li>Choose "New catalog from POT file" from <strong>Poedit</strong> and select kotakin.pot file.</li>
+    <li>Fill required input on the Settings dialog that appear.</li>
+    <li>When the save as dialog appear, fill the file name "kotakin.po".</li>
+    <li>The <strong>Poedit</strong> will automatically create es_ES.mo file.</li>
+    <li>Create a new folder "es_ES/LC_MESSAGES" inside "workbench/sule/kotakin/src/lang" folder.</li>
+    <li>Save / Move the saved "kotakin.po" and "kotakin.mo" file to previously created folder.</li>
+    <li>Go to to Admin preference and change the language to "es_ES"..</li>
+</ol>
+
+<h1>Update / Changelogs:</h1>
+<br/>
+<strong>v.1.2.5</strong>
+<ul>
+    <li>Reduce saved file name to 40 chars.</li>
+</ul>
+<br/>
+<strong>v.1.2.4</strong>
+<ul>
+    <li>Fixing login link sent to new registered user.</li>
+</ul>
+<br/>
+<strong>v.1.2.3</strong>
+<ul>
+    <li>Fixing link expire time checking when no time defined.</li>
+    <li>Fixing folder download.</li>
+    <li>Provide default user background image if not defined.</li>
+</ul>
+<br/>
+<strong>v.1.2.2</strong>
+<ul>
+    <li>Fixing link expire time checking.</li>
+    <li>Disable the disk space indicator when the PHP function is not available / disabled.</li>
+    <li>Fixing the downloader process, to make sure it still working when PHP fileinfo module is not available.</li>
+</ul>
+<br/>
+<strong>v.1.2.1</strong>
+<ul>
+    <li>Fixing changing password.</li>
+</ul>
+<br/>
+<strong>v.1.2.0</strong>
+<ul>
+    <li>Option to disable users upload in shared folder.</li>
+    <li>MP3 Preview (using <a href="http://kolber.github.io/audiojs/" target="_blank">http://kolber.github.io/audiojs/</a>)</li>
+    <li>MP4 Video Preview (using<a href="http://www.videojs.com" target="_blank"> http://www.videojs.com</a>)</li>
+</ul>
+<strong>v.1.1.0</strong>
+<ul>
+    <li>Show disk usage capacity at admin dashboard.</li>
+    <li>Add artisan command "kotakin:removeExpiredLink" to remove any expired link, and the file (optional).</li>
+    <li>Add artisan command "kotakin:removeDlLimitedLink" to remove any download limit reached link, and the file (optional).</li>
+</ul>
+
+<h1>Thanks to...</h1>
+<p>Kotakin was created with the latest OpenSource Technology available on the market. I would like to thank to:</p>
+<ul>
+    <li><a href="http://getbootstrap.com/" target="_blank">Laravel</a> 4 Author & Contributors.</li>
+    <li><a href="http://laravel.com/" target="_blank">Twitter Bootstrap</a> Author & Contributors.</li>
+    <li><a href="http://jquery.com/" target="_blank">jQuery</a> Author & Contributors.</li>
+    <li><a href="http://buildinternet.com/project/supersized/" target="_blank">‘Supersized’ Full Screen Background</a> Author & Contributors.</li>
+    <li><a href="http://blueimp.github.io/jQuery-File-Upload/" target="_blank">jQuery Ajax Upload</a> Author & Contributors.</li>
+    <li><a href="https://github.com/mathiasbynens/jquery-placeholder" target="_blank">jQuery Placeholder</a> Author & Contributors.</li>
+    <li><a href="http://github.com/brutaldesign/swipebox" target="_blank">Swipebox</a> Image Gallery Author & Contributors.</li>
+    <li><a href="http://kolber.github.io/audiojs/" target="_blank">audio.js</a> MP3 Player Author & Contributors.</li>
+    <li><a href="http://www.videojs.com" target="_blank">video.js</a> MP4 Video Player Author & Contributors.</li>
+    <li>Buyers who are kindly providing suggestions to improve this item.</li>
+</ul>
+
+<br/>
+<h1> Final notes</h1>
+<p>If you have any suggestions, ideas, comments, or if you (gasp!) found a bug, don't hestitate to email me at <a href="mailto:work@sulaeman.com">work@sulaeman.com</a>.</p>
+
+</body>
+</html>

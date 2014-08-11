@@ -1,0 +1,59 @@
+{% extends "kotakin::user_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="page-header">
+            <h4 class="modal-title">{{ _('Your Profile') }}</h4>
+        </div>
+        {{ form_open({'url': url_current()}) }}
+            <div class="form-group{% if errors.has('name') %} error{% endif %}">
+                <label for="name">{{ _('Name') }}</label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" value="{{ user.name(form_getValueAttribute('name')) }}" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group{% if errors.has('email') %} error{% endif %}">
+                <label for="email">{{ _('Email') }}</label>
+                <div class="controls">
+                    <input type="text" id="email" name="email" value="{{ user.email(form_getValueAttribute('email')) }}" class="form-control" />
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group mb0">
+                <label>{{ _(' ') }}</label>
+                <div class="controls">
+                    <div class="alert alert-info mb10">{{ _('Required if you want to change the password.') }}</div>
+                </div>
+            </div>
+            <div class="form-group{% if errors.has('password') %} error{% endif %}">
+                <label for="password">{{ _('Password') }}</label>
+                <div class="controls">
+                    <input type="password" id="password" name="password" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group{% if errors.has('confirm_password') %} error{% endif %}">
+                <label for="confirm-password">{{ _('Confirm Password') }}</label>
+                <div class="controls">
+                    <input type="password" id="confirm-password" name="confirm_password" class="form-control" />
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group{% if errors.has('date_format') %} error{% endif %}">
+                <label for="date-format">{{ _('Date Format') }}</label>
+                <div class="controls">
+                    <input type="text" id="date-format" name="date_format" value="{{ user.dateFormat(form_getValueAttribute('date_format')) }}" class="form-control" />
+                    <a href="http://php.net/manual/en/function.date.php" target="_blank" class="btn btn-info btn-small mt10">{{ _('format reference') }}</a>
+                </div>
+            </div>
+            <div class="form-group align_right">
+                <button type="submit" class="btn btn-primary">{{ _('Save Changes') }}</button>
+            </div>
+        {{ form_close() }}
+    </div>
+{% endblock %}

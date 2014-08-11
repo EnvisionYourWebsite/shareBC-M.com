@@ -1,0 +1,584 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kotakin\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sulaeman <me@sulaeman.com>\n"
+"Language-Team: Kotakin <kotakin@sulaeman.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: Indonesia\n"
+
+msgid "General Preferences"
+msgstr ""
+
+msgid "Product Title"
+msgstr ""
+
+msgid "Google Analytic"
+msgstr ""
+
+msgid "Email Protocol"
+msgstr ""
+
+msgid "PHP Mail"
+msgstr ""
+
+msgid "SMTP"
+msgstr ""
+
+msgid "Sendmail"
+msgstr ""
+
+msgid "Email Server"
+msgstr ""
+
+msgid "Email Port"
+msgstr ""
+
+msgid "Email Encryption"
+msgstr ""
+
+msgid "Email Username"
+msgstr ""
+
+msgid "Email Password"
+msgstr ""
+
+msgid "Sendmail Path"
+msgstr ""
+
+msgid "Sender Email"
+msgstr ""
+
+msgid "Sender Name"
+msgstr ""
+
+msgid "Reply To Email"
+msgstr ""
+
+msgid "Image library"
+msgstr ""
+
+msgid "GD"
+msgstr ""
+
+msgid "ImageMagick"
+msgstr ""
+
+msgid "ImageMagick Path"
+msgstr ""
+
+msgid "Save Changes"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Please Sign In"
+msgstr ""
+
+msgid "Your Email"
+msgstr ""
+
+msgid "Your Password"
+msgstr ""
+
+msgid "Remember Me"
+msgstr ""
+
+msgid "Forgot password?"
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "Page Not Found"
+msgstr ""
+
+msgid "Error 404"
+msgstr ""
+
+msgid ""
+"The page you requested could not be found, either contact your webmaster or "
+"try again. Use your browsers <b>Back</b> button to navigate to the page you "
+"have prevously come from"
+msgstr ""
+
+msgid "Or you could just press this neat little button:"
+msgstr ""
+
+msgid "Take Me Home"
+msgstr ""
+
+msgid "All User"
+msgstr ""
+
+msgid "New User"
+msgstr ""
+
+msgid "Access"
+msgstr ""
+
+msgid "Last Login"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Activate"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Edit \"%s\" Information"
+msgstr ""
+
+msgid "Create a new user"
+msgstr ""
+
+msgid "Your Profile"
+msgstr ""
+
+msgid "Required if you want to change the password."
+msgstr ""
+
+msgid "Confirm Password"
+msgstr ""
+
+msgid "Date Format"
+msgstr ""
+
+msgid "format reference"
+msgstr ""
+
+msgid "Access Level"
+msgstr ""
+
+msgid "Super Administrator (Full Access)"
+msgstr ""
+
+msgid "Administrator (Admin Access, No Preferences Access)"
+msgstr ""
+
+msgid "User (Only Frontend Access)"
+msgstr ""
+
+msgid "Max. Upload Size"
+msgstr ""
+
+msgid "in Bytes"
+msgstr ""
+
+msgid "Allowed File"
+msgstr ""
+
+msgid "file type reference"
+msgstr ""
+
+msgid "Background"
+msgstr ""
+
+msgid "max. file size"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "User URL"
+msgstr ""
+
+msgid ""
+"Each user (excluding Administrator / Super Administrators) having their own "
+"URL. User can log in with a password to Up-/Download. Allowed characters: a "
+"to z, A to Z, 0 to 9 and - (dash)."
+msgstr ""
+
+msgid "Email Recipients"
+msgstr ""
+
+msgid ""
+"Select users who will receive email notification after file uploaded from "
+"the frontend."
+msgstr ""
+
+msgid "You can choose more than one by CTRL / CMD + Click"
+msgstr ""
+
+msgid "Remove selections"
+msgstr ""
+
+msgid "Register & Notify User"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "File Types"
+msgstr ""
+
+msgid ""
+"Define allowed file types when uploading by this user. Please split accepted "
+"extensions with a \",\", in example \"jpeg,png,gif,zip\". If you would like "
+"to accept all types of files, leave this field empty."
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "File Types Reference"
+msgstr ""
+
+msgid "Background Image"
+msgstr ""
+
+msgid ""
+"The background image is the image that is shown to the user in full screen "
+"at login. This is not shown in the Administrators / Super Administrators "
+"Login, but solely with the Frontend Login."
+msgstr ""
+
+msgid "The image should have the following properties:"
+msgstr ""
+
+msgid "Instruction to reset your password has been sent to your email address."
+msgstr ""
+
+msgid "Already remember"
+msgstr ""
+
+msgid "Enter your email address"
+msgstr ""
+
+msgid "Reset password"
+msgstr ""
+
+msgid "Change your password"
+msgstr ""
+
+msgid "New Password"
+msgstr ""
+
+msgid "Confirm new password"
+msgstr ""
+
+msgid "Change Password"
+msgstr ""
+
+msgid "Archives"
+msgstr ""
+
+msgid ""
+"Following is the list of archive created when downloading folder. Please "
+"delete the old archive (more than 1 day old) to reduce your used disk space."
+msgstr ""
+
+msgid "Filename"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "No archive created at this moment."
+msgstr ""
+
+msgid "Links"
+msgstr ""
+
+msgid "Informations"
+msgstr ""
+
+msgid "Downloaded %d times"
+msgstr ""
+
+msgid "Limit:"
+msgstr ""
+
+msgid "Valid until:"
+msgstr ""
+
+msgid "No link created at this moment."
+msgstr ""
+
+msgid "Your password has been changed. You can continue to Sign In."
+msgstr ""
+
+msgid "Search - %d results"
+msgstr ""
+
+msgid "Search folders & files"
+msgstr ""
+
+msgid "search"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Modified"
+msgstr ""
+
+msgid "No item found, try another keywords."
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "My Account"
+msgstr ""
+
+msgid "Email Templates"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Interface Editor"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Session Information"
+msgstr ""
+
+msgid "Your session might be expired, click \"Continue\" to re-login."
+msgstr ""
+
+msgid "New folder"
+msgstr ""
+
+msgid "Kind"
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Delete Folder"
+msgstr ""
+
+msgid "Delete File"
+msgstr ""
+
+msgid "Are you sure want to delete \"%s\" with all folders and files in it?"
+msgstr ""
+
+msgid "Are you sure want to delete \"%s\"?"
+msgstr ""
+
+msgid "Rename Folder"
+msgstr ""
+
+msgid "Rename File"
+msgstr ""
+
+msgid "No shared folder for you at this moment."
+msgstr ""
+
+msgid "No folder or file in here at this moment."
+msgstr ""
+
+msgid "Create a Folder"
+msgstr ""
+
+msgid "Folder name"
+msgstr ""
+
+msgid "Upload Files"
+msgstr ""
+
+msgid "Click \"Choose Files\" to start selecting files you want to upload."
+msgstr ""
+
+msgid "Max. upload size: %s"
+msgstr ""
+
+msgid "Choose files"
+msgstr ""
+
+msgid "Saving changes..."
+msgstr ""
+
+msgid "CSS"
+msgstr ""
+
+msgid "JavaScript"
+msgstr ""
+
+msgid ""
+"Saving changes will reflect the live file. Read the %sTemplate Variable "
+"Documentation%s at \"Interfaces\" area, if you wish to modify the template "
+"variables."
+msgstr ""
+
+msgid "Choose a action"
+msgstr ""
+
+msgid "Send by Email"
+msgstr ""
+
+msgid "Shared folder options"
+msgstr ""
+
+msgid "Invite to folder"
+msgstr ""
+
+msgid "Create public link"
+msgstr ""
+
+msgid "Move"
+msgstr ""
+
+msgid "Shared folder options for \"%s\""
+msgstr ""
+
+msgid "Share \"%s\" with users"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Share folder"
+msgstr ""
+
+msgid "Create a public link for \"%s\""
+msgstr ""
+
+msgid "All fields are optional."
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Move Folder"
+msgstr ""
+
+msgid "Move File"
+msgstr ""
+
+msgid "type folder path"
+msgstr ""
+
+msgid "example:"
+msgstr ""
+
+msgid "\"/\" (to root folder)"
+msgstr ""
+
+msgid "\"/a_folder_name/child_folder_name\""
+msgstr ""
+
+msgid "Empty folder"
+msgstr ""
+
+msgid "Delete Selection"
+msgstr ""
+
+msgid "Are you sure want to delete the selected item(s)?"
+msgstr ""
+
+msgid "Send Email"
+msgstr ""
+
+msgid "Email address"
+msgstr ""
+
+msgid "Separate each email address using comma."
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Attachments"
+msgstr ""
+
+msgid "Could not move to it's own folder, please select another one."
+msgstr ""
+
+msgid "Max download limit reached for this file."
+msgstr ""
+
+msgid "Unlock"
+msgstr ""
+
+msgid "HTML Message"
+msgstr ""
+
+msgid "Plain Message"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "New Files Uploaded"
+msgstr ""
+
+msgid "Send to user requesting password reset."
+msgstr ""
+
+msgid "Send to new created user."
+msgstr ""
+
+msgid ""
+"Send to user email recipients. Will be send after upload popup (modal) "
+"closed."
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
+msgid "shared folder"
+msgstr ""
+
+msgid "Locale Language"
+msgstr ""
+
+msgid ""
+"Use your locale language code, in example \"id_ID\". Read the documentation "
+"on how to create your own translation. The inline texts will be used if your "
+"specific translation not found or could not be read by PHP."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "%s of %s, %s%s free%s"
+msgstr ""
+
+msgid "Allow Upload?"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Disable"
+msgstr ""
+
+msgid "Uploading file is disabled in this folder"
+msgstr ""
+
+msgid ""
+"Unable to move \"%s\" to \"%s\", please make sure no same folder (with "
+"uppercase or lower case name) there."
+msgstr ""

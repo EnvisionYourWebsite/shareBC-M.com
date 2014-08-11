@@ -1,0 +1,339 @@
+{% extends "kotakin::user_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="collection-header">
+            <div class="browse-actions row mb10">
+                <div class="col-lg-6">
+                    <ul class="breadcrumb" style="background-color: #fff;">
+                        {{ page.breadcrumbs('<li class="%s"><a href="' ~ url_to('/' ~ page.userSlug ~ '%s') ~ '">%s</a></li>') }}
+                    </ul>
+                </div>
+                <div class="col-lg-6 align_right">
+                    {{ form_open({'url': url_to('/%s/search') | format(page.userSlug), 'method': 'GET', 'class': 'clearfix'}) }}
+                        <div class="input-group pull-right">
+                            <input type="text" id="search" name="q" class="form-control input-small" placeholder="{{ _('Search folders & files') }}">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-default btn-small" type="button">{{ _('search') }}</button>
+                            </span>
+                        </div>
+                        {% if not page.isRootCollection and page.isAllowUserUpload %}
+                        <a class="btn btn-default btn-small pull-right mr5" data-toggle="modal" href="#new-folder-modal"><i class="glyphicon glyphicon-plus-sign"></i> {{ _('New folder') }}</a>
+                        <a class="btn btn-default btn-small pull-right mr5" data-toggle="modal" href="#new-file-modal"><i class="glyphicon glyphicon-upload"></i> {{ _('Upload') }}</a>
+                        {% endif %}
+                    {{ form_close() }}
+                </div>
+            </div>
+        </div>
+        <div class="collection-table-head">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="col-icon"></th>
+                        <th class="col-name">{{ _('Name') }}</th>
+                        <th class="col-kind">{{ _('Kind') }}</th>
+                        <th class="col-modified">{{ _('Modified') }}</th>
+                        <th class="col-action"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="collection-body">
+            <table class="table table-hover">
+                <tbody class="browse-items">
+                {% if page.collection is not empty %}
+                    {% for item in page.collection %}
+                    <tr>
+                        <td class="col-icon">
+                            {% if item.isFile %}
+                            <img src="{{ url_to(item.object.file.thumb('50x50').permalink) }}" alt="" />
+                            {% else %}
+                            <img src="{{ url_asset('/packages/sule/kotakin/img/icons/folder.png') }}" alt="" />
+                            {% endif %}
+                        </td>
+                        <td class="col-name">
+                            {% if item.isFile %}
+                                {% if item.object.file.width > 0 %}
+                                <a href="{{ url_to(item.object.file.thumb('800x800').permalink) }}" title="{{ item.object.name | replace('"', "'") }}" class="img-swipebox">{{ item.object.name }}<img src="{{ item.object.file.thumb('25x25').permalink }}" class="hidden"></a>
+                                {% elseif item.object.file.extension in ['pdf','txt'] %}
+                                <a href="#item-view-{{ item.id }}" title="{{ item.object.name | replace('"', "'") }}" class="file-view-popup" role="button" data-toggle="modal">{{ item.object.name }}</a>
+                                {% else %}
+                                <a href="#item-pop-{{ item.id }}" title="{{ item.object.name | replace('"', "'") }}" class="file-popup" role="button" data-toggle="modal">{{ item.object.name }}</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ url_to('/%s/%s') | format(page.userSlug, item.object.permalink) }}" title="{{ item.object.name | replace('"', "'") }}">{{ item.object.name }}</a>
+                            {% endif %}
+                        </td>
+                        <td class="col-kind">{{ item.object.kind }}</td>
+                        <td class="col-modified">
+                        {% if item.object.updatedAt > 0 %}
+                            {{ item.object.updatedAt | date(currentUser.dateFormat) }}
+                        {% endif %}
+                        </td>
+                        <td class="col-action">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-th-list"></i> <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url_to('/%s/%s') | format(page.userSlug, item.object.downloadPermalink) }}"><i class="glyphicon glyphicon-download"></i> {{ _('Download') }}</a></li>
+                                    {% if item.isOwnedBy(currentUser) %}
+                                    <li class="divider"></li>
+                                    <li><a href="#item-delete-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> {{ _('Delete') }}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#item-rename-{{ item.id }}" role="button" data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i> {{ _('Rename') }}</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+
+                            {% if item.object.file.extension in ['pdf','txt'] %}
+                            <div id="item-view-{{ item.id }}" class="modal fade view-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            <h4 class="modal-title">{{ item.object.name }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <iframe src="{{ url_to('/blank') }}" frameborder="0" class="view-iframe" data-opened="0"></iframe>
+                                            <input type="hidden" name="item" class="view-item-slug" value="{{ item.object.slug }}" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ url_to('/%s/%s') | format(page.userSlug, item.object.downloadPermalink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-download glyphicon-white"></i> {{ _('Download') }}</a>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div id="item-pop-{{ item.id }}" class="modal fade{% if item.object.file.extension == 'mp4' %} video{% else %} pop{% endif %}-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            <h4 class="modal-title">{{ item.object.name }}</h4>
+                                        </div>
+                                        <div class="modal-body align_center">
+                                            {% if item.object.file.extension == 'mp4' %}
+                                            <video id="video-{{ item.id }}" class="video-js vjs-default-skin" controls preload="auto" width="498" height="264" poster="{{ url_asset('packages/sule/kotakin/img/mp4-clip.png') }}" data-setup='{"example_option":true}'>
+                                                <source src="{{ url_to('/%s/%s') | format(page.userSlug, item.object.downloadPermalink) }}" type='video/mp4' />
+                                            </video>
+                                            {% else %}
+                                            <img src="{{ url_to(item.object.file.thumb('100x100').permalink) }}" alt="" class="mt30 mb10" width="100" />
+                                            <br/>
+                                            <strong>{{ item.object.kind }}</strong>
+                                            <p>{{ item.object.createdAt | date(currentUser.dateFormat) }} - {{ item.object.file.size }}</p>
+                                            {% if item.object.file.extension == 'mp3' %}
+                                            <div class="audio-preview clearfix mt30">
+                                                <audio src="{{ url_to('/%s/%s') | format(page.userSlug, item.object.downloadPermalink) }}" preload="none" />
+                                            </div>
+                                            {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ url_to('/%s/%s') | format(page.userSlug, item.object.downloadPermalink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-download glyphicon-white"></i> {{ _('Download') }}</a>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="item-delete-{{ item.id }}" class="modal fade" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            {% if item.isFolder %}
+                                            <h4 class="modal-title">{{ _('Delete Folder') }}</h4>
+                                            {% else %}
+                                            <h4 class="modal-title">{{ _('Delete File') }}</h4>
+                                            {% endif %}
+                                        </div>
+                                        {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                                        <div class="modal-body">
+                                            {% if item.isFolder %}
+                                            <p>{{ _('Are you sure want to delete "%s" with all folders and files in it?') | format(item.object.name) }}</p>
+                                            {% else %}
+                                            <p>{{ _('Are you sure want to delete "%s"?') | format(item.object.name) }}</p>
+                                            {% endif %}
+                                            <input type="hidden" name="item" value="{{ item.id }}" />
+                                            <input type="hidden" name="_action" value="delete" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                                            <button type="submit" class="btn btn-primary">{{ _('Continue') }}</button>
+                                        </div>
+                                        {{ form_close() }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="item-rename-{{ item.id }}" class="modal fade name-modal rename-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            {% if item.isFolder %}
+                                            <h4 class="modal-title">{{ _('Rename Folder') }}</h4>
+                                            {% else %}
+                                            <h4 class="modal-title">{{ _('Rename File') }}</h4>
+                                            {% endif %}
+                                        </div>
+                                        {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                                        <div class="modal-body">
+                                            <div class="input-group">
+                                                <span class="input-group-addon input-small"><i class="glyphicon glyphicon-pencil"></i></span>
+                                                <input type="text" name="name" class="form-control input-small" value="{{ item.object.baseName }}">
+                                            </div>
+                                            <input type="hidden" name="item" value="{{ item.id }}" />
+                                            <input type="hidden" name="_action" value="rename" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                                            <button type="submit" class="btn btn-primary">{{ _('Continue') }}</button>
+                                        </div>
+                                        {{ form_close() }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <td colspan="5">
+                        <div class="alert alert-info alert-block align_center">
+                            {% if page.isRootCollection %}
+                            {{ _('No shared folder for you at this moment.') }}
+                            {% else %}
+                            {{ _('No folder or file in here at this moment.') }}
+                            {% endif %}
+                        </div>
+                    </td>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if not page.isRootCollection and page.isAllowUserUpload %}
+    <div id="new-folder-modal" class="modal fade name-modal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h4 class="modal-title">{{ _('Create a Folder') }}</h4>
+                </div>
+                {{ form_open({'url': url_current(), 'class': 'mb0'}) }}
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon input-small"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <input type="text" name="name" class="form-control input-small" placeholder="{{ _('Folder name') }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+                    <button type="submit" class="btn btn-default btn-primary">{{ _('Continue') }}</button>
+                </div>
+                {{ form_close() }}
+            </div>
+        </div>
+    </div>
+
+    <div id="new-file-modal" class="modal fade" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ _('Upload Files') }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="choose-files-intro">{{ _('Click "Choose Files" to start selecting files you want to upload.') }}</p>
+                    <!-- The table listing the files available for upload/download -->
+                    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+                </div>
+                <div class="modal-footer clearfix">
+                    <div class="fleft">{{ _('Max. upload size: %s') | format(currentUser.maxUploadSize) }}</div>
+                    <div class="file-actions fright">
+                        {{ form_open({
+                            'id': 'fileupload', 
+                            'url': url_to('/' ~ page.userSlug ~ '/upload/file'), 
+                            'files': true,
+                            'class': 'mb0'
+                        }) }}
+                            <span class="btn btn-primary fileinput-button"><i class="glyphicon glyphicon-plus glyphicon-white"></i> {{ _('Choose files') }}<input type="file" name="files[]" multiple accept="{{ currentUser.allowedMimeTypes | join('|') }}" /></span>
+                            <input type="hidden" name="folder" value="{{ page.getCurrentFolderId }}" />
+                        {{ form_close() }}
+                        <button class="btn btn-default a-close-file-modal" data-default-txt="{{ _('Close') }}" data-process-txt="{{ _('Saving changes...') }}">{{ _('Close') }}</button>
+                        <input type="hidden" id="uploaded-files" name="uploaded_file" value=",110,111" />
+                    </div>
+                </div>
+
+                <!-- The template to display files available for upload -->
+                <script id="template-upload" type="text/x-tmpl">
+                {{ '{% for (var i=0, file; file=o.files[i]; i++) { %}
+                    <tr class="template-upload fade">
+                        <td class="preview"></td>
+                        <td>
+                            <span class="name">{%=file.name%}</span><br/>
+                            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+                            {% if (!o.files.error) { %}
+                                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+                            {% } %}
+                            {% if (file.error) { %}
+                                <div><span class="label label-important">Error</span> {%=file.error%}</div>
+                            {% } %}
+                        </td>
+                        <td class="actions">
+                            {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+                                <button class="btn btn-primary start hidden">
+                                    <i class="glyphicon glyphicon-upload glyphicon-white"></i>
+                                    <span>Start</span>
+                                </button>
+                            {% } %}
+                            {% if (!i) { %}
+                                <button class="btn cancel">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            {% } %}
+                        </td>
+                    </tr>
+                {% } %}' | raw }}
+                </script>
+                <!-- The template to display files available for download -->
+                <script id="template-download" type="text/x-tmpl">
+                {{ "{% for (var i=0, file; file=o.files[i]; i++) { %}
+                    <tr class=\"template-download fade\">
+                        <td class=\"preview\">
+                            {% if (file.thumbnail_url) { %}
+                                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\" data-gallery><img src=\"{%=file.thumbnail_url%}\"></a>
+                            {% } %}
+                        </td>
+                        <td>
+                            <p class=\"name\">
+                                <a href=\"{%=file.url%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\" {%=file.thumbnail_url?'data-gallery':''%}>{%=file.name%}</a>
+                            </p>
+                            <span class=\"size\">{%=o.formatFileSize(file.size)%}</span>
+                            {% if (file.error) { %}
+                                <div><span class=\"label label-important\">Error</span> {%=file.error%}</div>
+                            {% } %}
+                        </td>
+                        <td class=\"actions\">
+                            {% if (!file.error) { %}
+                            <button class=\"btn btn-danger delete\" data-type=\"{%=file.delete_type%}\" data-url=\"{%=file.delete_url%}\"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{\"withCredentials\":true}'{% } %}>
+                                <i class=\"glyphicon glyphicon-trash glyphicon-white\"></i>
+                            </button>
+                            {% } %}
+                        </td>
+                    </tr>
+                {% } %}" | raw }}
+                </script>
+            </script>
+        </script>
+    </div>
+    {% endif %}
+{% endblock %}

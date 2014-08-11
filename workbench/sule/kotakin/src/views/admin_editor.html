@@ -1,0 +1,74 @@
+{% extends "kotakin::admin_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="modal-title">{{ _('Interface Editor') }}</h4>
+                </div>
+                <div class="col-lg-6 align_right">
+                    {{ form_open({'url': url_current(), 'id': 'file-save-frm'}) }}
+                    <button name="save" class="btn btn-primary file-save-btn">{{ _('Save Changes') }}</button>
+                    <textarea id="file-content" name="content" style="display:none;"></textarea>
+                    <input type="hidden" name="file" value="{{ file }}" />
+                    <input type="hidden" name="type" value="{{ type }}" />
+                    {{ form_close() }}
+                </div>
+            </div>
+        </div>
+        
+        <div id="editor-wrapper" class="row">
+            <div id="editor-sidebar" class="col-lg-3">
+                {% if files.template is not empty %}
+                <h4 class="mt0">{{ _('Templates') }}</h4>
+                <ul class="list-unstyled">
+                    {% for file in files.template %}
+                    <li>
+                        <img src="{{ url_asset('/packages/sule/kotakin/img/icons/_blank.png') }}" width="20" class="mr5" />
+                        <a href="{{ url_to('/admin/preference/editor?file=%s&type=template') | format(file) }}">{{ file }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if files.css is not empty %}
+                <h4 class="mt20">{{ _('CSS') }}</h4>
+                <ul class="list-unstyled">
+                    {% for file in files.css %}
+                    <li>
+                        <img src="{{ url_asset('/packages/sule/kotakin/img/icons/_blank.png') }}" width="20" class="mr5" />
+                        <a href="{{ url_to('/admin/preference/editor?file=%s&type=css') | format(file) }}">{{ file }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if files.js is not empty %}
+                <h4 class="mt20">{{ _('JavaScript') }}</h4>
+                <ul class="list-unstyled">
+                    {% for file in files.js %}
+                    <li>
+                        <img src="{{ url_asset('/packages/sule/kotakin/img/icons/_blank.png') }}" width="20" class="mr5" />
+                        <a href="{{ url_to('/admin/preference/editor?file=%s&type=js') | format(file) }}">{{ file }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-lg-9">
+                <div class="alert alert-info">{{ _('Saving changes will reflect the live file. Read the %sTemplate Variable Documentation%s at "Interfaces" area, if you wish to modify the template variables.') | format('<a href="'~ url_to('/packages/sule/kotakin/templating/index.html') ~'" class="btn btn-danger btn-small" target="_blank">', '</a>') }}</div>
+                <h5>{{ file }}</h5>
+                <div id="editor-content">
+                    <pre id="editor">{{ fileContent | raw }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

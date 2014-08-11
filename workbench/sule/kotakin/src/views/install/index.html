@@ -1,0 +1,113 @@
+{% extends "kotakin::install/layout" %}
+{% block body %}
+    {{ form_open({'url': url_current(), 'class': 'form-horizontal mt30'}) }}
+        <div class="form-group">
+            <label for="db_name" class="col-lg-2 control-label">Public Paths</label>
+            <div class="col-lg-10">
+                <div>
+                    Background Path Storage : <strong>{{ backgroundPath }}</strong>
+                    {% if isBackgroundPathWriteable %}
+                    <div class="alert alert-success">The background path is exist and writeable.</div>
+                    {% else %}
+                    <div class="alert alert-danger">The background path is not exist or writeable, please fix it.</div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    Package Path Storage : <strong>{{ packagePath }}</strong>
+                    {% if isPackagePathWriteable %}
+                    <div class="alert alert-success">The package path is exist and writeable.</div>
+                    {% else %}
+                    <div class="alert alert-danger">The package path is not exist or writeable, please fix it.</div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    Preview Path Storage : <strong>{{ previewPath }}</strong>
+                    {% if isPreviewPathWriteable %}
+                    <div class="alert alert-success">The preview path is exist and writeable.</div>
+                    {% else %}
+                    <div class="alert alert-danger">The preview path is not exist or writeable, please fix it.</div>
+                    {% endif %}
+                </div>
+
+                {% if isPackagePathWriteable %}
+                <div>
+                    CSS Path Storage : <strong>{{ cssPath }}</strong>
+                    {% if isCSSPathWriteable %}
+                    <div class="alert alert-success">The CSS path is exist and writeable.</div>
+                    {% else %}
+                    <div class="alert alert-danger">The CSS path is not exist or writeable, please fix it.</div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    JS Path Storage : <strong>{{ jsPath }}</strong>
+                    {% if isJSPathWriteable %}
+                    <div class="alert alert-success">The JS path is exist and writeable.</div>
+                    {% else %}
+                    <div class="alert alert-danger">The JS path is not exist or writeable, please fix it.</div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="db_name" class="col-lg-2 control-label">Storage Paths</label>
+            <div class="col-lg-10">
+                Storage Path : <strong>{{ storagePath }}</strong>
+                {% if isStoragePathWriteable %}
+                <div class="alert alert-success">The storage path is exist and writeable.</div>
+                {% else %}
+                <div class="alert alert-danger">Please make sure that the storage path and all folder inside it are exists and writeable.</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="db_name" class="col-lg-2 control-label">Config Files</label>
+            <div class="col-lg-10">
+                <div>
+                    App Config File : <strong>{{ appConfigPath }}</strong>
+                    {% if isAppConfigWriteable %}
+                    <div class="alert alert-success">The app config file is exist and writeable.</div>
+                    {% else %}
+                    <div class="alert alert-danger">The app config file is not exist or writeable, please fix it.</div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    Database Config File : <strong>{{ databaseConfigPath }}</strong>
+                    {% if isDatabaseConfigWriteable %}
+                    <div class="alert alert-success">The database config file is exist and writeable.</div>
+                    {% else %}
+                    <div class="alert alert-danger">The database config fil is not exist or writeable, please fix it.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="db_name" class="col-lg-2 control-label">Language Path</label>
+            <div class="col-lg-10">
+                Language Path : <strong>{{ langPath }}</strong>
+                {% if isLangPathWriteable %}
+                <div class="alert alert-success">The language path is exist and writeable.</div>
+                {% else %}
+                <div class="alert alert-danger">Please make sure that the language path and all folder inside it are exists and writeable.</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group{% if errors.has('timezone') %} has-error{% endif %}">
+            <label for="timezone" class="col-lg-2 control-label">System Timezone</label>
+            <div class="col-lg-10">
+                {{ form_text('timezone', timezone, {'id': 'timezone', 'class': 'form-control'}) }}
+                <span class="help-block">Define the timezone to be use by this application. In example "Asia/Jakarta" without the double quote symbol, <a href="http://www.php.net/manual/en/timezones.php" target="_blank">http://www.php.net/manual/en/timezones.php</a> is having the list of all available timezones.</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label"></label>
+            <div class="col-lg-10">
+                <button type="submit" class="btn btn-primary">Continue</button>
+            </div>
+        </div>
+    {{ form_close() }}
+{% endblock %}

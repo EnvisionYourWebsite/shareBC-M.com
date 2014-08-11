@@ -1,0 +1,608 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sulaeman <me@sulaeman.com>\n"
+"Language-Team: Sulaeman <me@sulaeman.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+msgid "General Preferences"
+msgstr "Pengaturan Utama"
+
+msgid "Product Title"
+msgstr "Nama Produk"
+
+msgid "Google Analytic"
+msgstr ""
+
+msgid "Email Protocol"
+msgstr "Protokol Email"
+
+msgid "PHP Mail"
+msgstr ""
+
+msgid "SMTP"
+msgstr ""
+
+msgid "Sendmail"
+msgstr ""
+
+msgid "Email Server"
+msgstr "Server Email"
+
+msgid "Email Port"
+msgstr "Port Email"
+
+msgid "Email Encryption"
+msgstr "Enkripsi Email"
+
+msgid "Email Username"
+msgstr "Username Email"
+
+msgid "Email Password"
+msgstr "Password Email"
+
+msgid "Sendmail Path"
+msgstr "Lokasi Sendmail"
+
+msgid "Sender Email"
+msgstr "Email Pengirim"
+
+msgid "Sender Name"
+msgstr "Nama Pengirim"
+
+msgid "Reply To Email"
+msgstr "Email Reply-to"
+
+msgid "Image library"
+msgstr ""
+
+msgid "GD"
+msgstr ""
+
+msgid "ImageMagick"
+msgstr ""
+
+msgid "ImageMagick Path"
+msgstr "Lokasi ImageMagick"
+
+msgid "Save Changes"
+msgstr "Simpan Perubahan"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Please Sign In"
+msgstr "Silahkan Masuk"
+
+msgid "Your Email"
+msgstr "Email Anda"
+
+msgid "Your Password"
+msgstr "Password Anda"
+
+msgid "Remember Me"
+msgstr "Ingat Saya"
+
+msgid "Forgot password?"
+msgstr "Lupa Password"
+
+msgid "Sign in"
+msgstr "Masuk"
+
+msgid "Page Not Found"
+msgstr "Halaman Tidak Ditemukan"
+
+msgid "Error 404"
+msgstr ""
+
+msgid ""
+"The page you requested could not be found, either contact your webmaster or "
+"try again. Use your browsers <b>Back</b> button to navigate to the page you "
+"have prevously come from"
+msgstr ""
+"Halaman yang Anda inginkan tidak dapat ditemukan, silahkan hubungi webmaster "
+"atau coba lagi. Gunakan tombol <b>Kembali</b> di browser untuk kembali ke "
+"halaman sebelumnya"
+
+msgid "Or you could just press this neat little button:"
+msgstr "Atau tekan tombol dibawah ini:"
+
+msgid "Take Me Home"
+msgstr "Kembali Ke Beranda"
+
+msgid "All User"
+msgstr "Semua Pengguna"
+
+msgid "New User"
+msgstr "Pengguna Baru"
+
+msgid "Access"
+msgstr "Akses"
+
+msgid "Last Login"
+msgstr "Terakhir Login"
+
+msgid "Edit"
+msgstr "Perbaharui"
+
+msgid "Deactivate"
+msgstr "Nonaktifkan"
+
+msgid "Activate"
+msgstr "Aktifkan"
+
+msgid "Delete"
+msgstr "Hapus"
+
+msgid "Edit \"%s\" Information"
+msgstr "Perbaharui \"%s\" Informasi"
+
+msgid "Create a new user"
+msgstr "Buat pengguna baru"
+
+msgid "Your Profile"
+msgstr "Profil Anda"
+
+msgid "Required if you want to change the password."
+msgstr "Dibutuhkan jika Anda ingin mengganti password."
+
+msgid "Confirm Password"
+msgstr "Konfirmasi Password"
+
+msgid "Date Format"
+msgstr "Format Tanggal"
+
+msgid "format reference"
+msgstr "petunjuk format"
+
+msgid "Access Level"
+msgstr "Tingkat Akses"
+
+msgid "Super Administrator (Full Access)"
+msgstr "Super Administrator (Akses Penuh)"
+
+msgid "Administrator (Admin Access, No Preferences Access)"
+msgstr "Administrator (Akses Admin, tanpa akses ke Pengaturan)"
+
+msgid "User (Only Frontend Access)"
+msgstr "Pengguna (Hanya halaman depan)"
+
+msgid "Max. Upload Size"
+msgstr "Maks. Ukuran Upload"
+
+msgid "in Bytes"
+msgstr "dalam Bytes"
+
+msgid "Allowed File"
+msgstr "Berkas Diperbolehkan"
+
+msgid "file type reference"
+msgstr "petunjuk tipe berkas"
+
+msgid "Background"
+msgstr "Gambar Latar"
+
+msgid "max. file size"
+msgstr "maks. ukuran berkas"
+
+msgid "URL"
+msgstr ""
+
+msgid "User URL"
+msgstr "URL Pengguna"
+
+msgid ""
+"Each user (excluding Administrator / Super Administrators) having their own "
+"URL. User can log in with a password to Up-/Download. Allowed characters: a "
+"to z, A to Z, 0 to 9 and - (dash)."
+msgstr ""
+"Tiap User (tidak termasuk Administrator / Super Administrators) mempunyai "
+"URL masing - masing. Pengguna dapat masuk menggunakan password untuk Up-/"
+"Download. Karakter yang diperbolehkan: a - z, A - Z, 0 - 9 and - (dash)."
+
+msgid "Email Recipients"
+msgstr "Email Penerima Notifikasi"
+
+msgid ""
+"Select users who will receive email notification after file uploaded from "
+"the frontend."
+msgstr ""
+"Piliah pengguna yang akan menerima notifikasi email setelah berkas di upload "
+"dari halaman depan."
+
+msgid "You can choose more than one by CTRL / CMD + Click"
+msgstr "Anda dapat memilih lebih dari satu menggunakan CTRL / CMD + Klik"
+
+msgid "Remove selections"
+msgstr "Hapus pilihan"
+
+msgid "Register & Notify User"
+msgstr "Daftarkan & Notifikasi Pengguna"
+
+msgid "Cancel"
+msgstr "Batal"
+
+msgid "File Types"
+msgstr "Tipe Berkas"
+
+msgid ""
+"Define allowed file types when uploading by this user. Please split accepted "
+"extensions with a \",\", in example \"jpeg,png,gif,zip\". If you would like "
+"to accept all types of files, leave this field empty."
+msgstr ""
+"Tentukan tipe berkas yang boleh di upload oleh pengguna ini. Pisahkan tiap "
+"ekstensi berkas menggunakan \",\", contoh \"jpeg,png,gif,zip\". Tinggalkan "
+"kosong untuk menerima semua tipe berkas."
+
+msgid "Close"
+msgstr "Tutup"
+
+msgid "File Types Reference"
+msgstr "Petunjuk Tipe Berkas"
+
+msgid "Background Image"
+msgstr "Gambar Latar"
+
+msgid ""
+"The background image is the image that is shown to the user in full screen "
+"at login. This is not shown in the Administrators / Super Administrators "
+"Login, but solely with the Frontend Login."
+msgstr ""
+"Gambar latar akan tampil secara penuh dihalaman masuk pengguna. Tidak akan "
+"tampil di Administrators / Super Administrators, hanya untuk halaman depan."
+
+msgid "The image should have the following properties:"
+msgstr "Gambar harus memiliki kriteria sebagai berikut:"
+
+msgid "Instruction to reset your password has been sent to your email address."
+msgstr "Instruksi untuk mengganti password telah dikirim ke email Anda."
+
+msgid "Already remember"
+msgstr "Sudah ingat"
+
+msgid "Enter your email address"
+msgstr "Email anda"
+
+msgid "Reset password"
+msgstr "Reset password"
+
+msgid "Change your password"
+msgstr "Ganti password Anda"
+
+msgid "New Password"
+msgstr "Password Baru"
+
+msgid "Confirm new password"
+msgstr "Konfirmasi password baru"
+
+msgid "Change Password"
+msgstr "Ganti Password"
+
+msgid "Archives"
+msgstr "Arsip"
+
+msgid ""
+"Following is the list of archive created when downloading folder. Please "
+"delete the old archive (more than 1 day old) to reduce your used disk space."
+msgstr ""
+"Berikut ini adalah daftar berkas arsip (zip) ketika meng-download folder. "
+"Disarankan menghapus arsip (yang lebih dari 1 hari) untuk membersihkannya."
+
+msgid "Filename"
+msgstr "Nama Berkas"
+
+msgid "Created By"
+msgstr "Dibuat Oleh"
+
+msgid "No archive created at this moment."
+msgstr "Tidak ada arsip untuk saat ini."
+
+msgid "Links"
+msgstr "Tautan"
+
+msgid "Informations"
+msgstr "Informasi"
+
+msgid "Downloaded %d times"
+msgstr "Didownload %d kali"
+
+msgid "Limit:"
+msgstr "Batas:"
+
+msgid "Valid until:"
+msgstr "Berlaku hingga:"
+
+msgid "No link created at this moment."
+msgstr "Tidak ada tautan untuk saat ini."
+
+msgid "Your password has been changed. You can continue to Sign In."
+msgstr "Password Anda telah diperbaharui. Silahkan gunakan Password baru Anda."
+
+msgid "Search - %d results"
+msgstr "Pencarian - %d item"
+
+msgid "Search folders & files"
+msgstr "Cari folder & berkas"
+
+msgid "search"
+msgstr "cari"
+
+msgid "Location"
+msgstr "Lokasi"
+
+msgid "Modified"
+msgstr "Dimodifikasi"
+
+msgid "No item found, try another keywords."
+msgstr "Tidak ada item ditemukan, coba kata pencarian lain."
+
+msgid "Dashboard"
+msgstr "Beranda"
+
+msgid "My Account"
+msgstr "Akun Saya"
+
+msgid "Email Templates"
+msgstr "Template Email"
+
+msgid "Users"
+msgstr "Pengguna"
+
+msgid "Interface Editor"
+msgstr "Editor Tampilan"
+
+msgid "Logout"
+msgstr "Keluar"
+
+msgid "Session Information"
+msgstr "Informasi Sesi"
+
+msgid "Your session might be expired, click \"Continue\" to re-login."
+msgstr "Sesi Anda mungkin telah habis, klik \"Lanjutkan\" untuk masuk kembali."
+
+msgid "New folder"
+msgstr "Folder baru"
+
+msgid "Kind"
+msgstr "Jenis"
+
+msgid "Rename"
+msgstr "Ganti nama"
+
+msgid "Delete Folder"
+msgstr "Hapus Folder"
+
+msgid "Delete File"
+msgstr "Hapus Berkas"
+
+msgid "Are you sure want to delete \"%s\" with all folders and files in it?"
+msgstr "Apakah Anda yakin untuk menghapus \"%s\" dengan semua isinya?"
+
+msgid "Are you sure want to delete \"%s\"?"
+msgstr "Apakah Anda yakin untuk menghapus \"%s\"?"
+
+msgid "Rename Folder"
+msgstr "Ganti Nama Folder"
+
+msgid "Rename File"
+msgstr "Ganti Nama Berkas"
+
+msgid "No shared folder for you at this moment."
+msgstr "Tidak ada folder untuk Anda saat ini."
+
+msgid "No folder or file in here at this moment."
+msgstr "Tidak ada folder atau berkas disini untuk saat ini."
+
+msgid "Create a Folder"
+msgstr "Buat Sebuah Folder"
+
+msgid "Folder name"
+msgstr "Nama folder"
+
+msgid "Upload Files"
+msgstr "Upload Berkas"
+
+msgid "Click \"Choose Files\" to start selecting files you want to upload."
+msgstr "Klik \"Pilih Berkas\" untuk memilih berkas yang akan di upload."
+
+msgid "Max. upload size: %s"
+msgstr "Maks. ukuran berkas: %s"
+
+msgid "Choose files"
+msgstr "Pilih Berkas"
+
+msgid "Saving changes..."
+msgstr "Menyimpan perubahan..."
+
+msgid "CSS"
+msgstr ""
+
+msgid "JavaScript"
+msgstr ""
+
+msgid ""
+"Saving changes will reflect the live file. Read the %sTemplate Variable "
+"Documentation%s at \"Interfaces\" area, if you wish to modify the template "
+"variables."
+msgstr ""
+"Menyimpan perubahan akan langsung diterapkan terhadap berkas asli. Jika Anda "
+"ingin memperbaharui variable template, silahkan baca %sDokumentasi Variable "
+"Template%s pada bagian \"Interfaces\"."
+
+msgid "Choose a action"
+msgstr "Pilih tindakan"
+
+msgid "Send by Email"
+msgstr "Kirim melalui Email"
+
+msgid "Shared folder options"
+msgstr "Opsi folder bersama"
+
+msgid "Invite to folder"
+msgstr "Undang ke folder"
+
+msgid "Create public link"
+msgstr "Buat tautan publik"
+
+msgid "Move"
+msgstr "Pindahkan"
+
+msgid "Shared folder options for \"%s\""
+msgstr "Opsi folder bersama untuk \"%s\""
+
+msgid "Share \"%s\" with users"
+msgstr "Bagikan \"%s\" dengan pengguna"
+
+msgid "Update"
+msgstr "Perbaharui"
+
+msgid "Share folder"
+msgstr "Bagikan folder"
+
+msgid "Create a public link for \"%s\""
+msgstr "Buat tautan publik untuk \"%s\""
+
+msgid "All fields are optional."
+msgstr "Semua isian dapat diabaikan."
+
+msgid "Description"
+msgstr "Penjelasan"
+
+msgid "Move Folder"
+msgstr "Pindahkan Folder"
+
+msgid "Move File"
+msgstr "Pindahkan Berkas"
+
+msgid "type folder path"
+msgstr "ketik lokasi folder"
+
+msgid "example:"
+msgstr "contoh:"
+
+msgid "\"/\" (to root folder)"
+msgstr "\"/\" (ke lokasi utama)"
+
+msgid "\"/a_folder_name/child_folder_name\""
+msgstr "\"/nama_folder/anak_folder\""
+
+msgid "Empty folder"
+msgstr "Folder kosong"
+
+msgid "Delete Selection"
+msgstr "Hapus Pilihan"
+
+msgid "Are you sure want to delete the selected item(s)?"
+msgstr "Apakah Anda yakin untuk menghapus item yang terpilih?"
+
+msgid "Send Email"
+msgstr "Kirim Email"
+
+msgid "Email address"
+msgstr "Alamat Email"
+
+msgid "Separate each email address using comma."
+msgstr "Pisahkan tiap email menggunakan tanda koma."
+
+msgid "Subject"
+msgstr "Subjek"
+
+msgid "Message"
+msgstr "Pesan"
+
+msgid "Attachments"
+msgstr "Lampiran"
+
+msgid "Could not move to it's own folder, please select another one."
+msgstr ""
+"Tidak dapat memindahkan ke folder nya sendiri, silahkan pilih yang lain."
+
+msgid "Max download limit reached for this file."
+msgstr "Tidak dapat melebihi batas download yang diperbolehkan."
+
+msgid "Unlock"
+msgstr "Buka"
+
+msgid "HTML Message"
+msgstr "Pesan HTML"
+
+msgid "Plain Message"
+msgstr "Pesan Teks"
+
+msgid "Preferences"
+msgstr "Pengaturan"
+
+msgid "General"
+msgstr "Utama"
+
+msgid "Name"
+msgstr "Nama"
+
+msgid "Continue"
+msgstr "Lanjutkan"
+
+msgid "Date"
+msgstr "Tanggal"
+
+msgid "New Files Uploaded"
+msgstr "Berkas baru diunggah"
+
+msgid "Send to user requesting password reset."
+msgstr "Dikirim ke pengguna yang meminta reset password."
+
+msgid "Send to new created user."
+msgstr "Dikirim ke pengguna baru."
+
+msgid ""
+"Send to user email recipients. Will be send after upload popup (modal) "
+"closed."
+msgstr ""
+"Dikirim ke penerima notifikasi setelah pengguna menutup popup (modal) upload."
+
+msgid "Templates"
+msgstr "Template"
+
+msgid "shared folder"
+msgstr "folder bersama"
+
+msgid "Locale Language"
+msgstr "Bahasa Lokal"
+
+msgid ""
+"Use your locale language code, in example \"id_ID\". Read the documentation "
+"on how to create your own translation. The inline texts will be used if your "
+"specific translation not found or could not be read by PHP."
+msgstr ""
+"Gunakan kode bahasa lokal Anda, contoh \"id_ID\". Silahkan baca dokumentasi "
+"mengenai cara membuat terjemahan Anda. Teks yang ada di PHP dan HTML akan "
+"digunakan jika terjemahan Anda tidak ditemukan atau tidak dapat dibaca."
+
+msgid "Create"
+msgstr "Lanjutkan"
+
+msgid "%s of %s, %s%s free%s"
+msgstr "%s dari %s, %s%s tersedia%s"
+
+msgid "Allow Upload?"
+msgstr "Ijinkan Upload?"
+
+msgid "Enable"
+msgstr "Ya"
+
+msgid "Disable"
+msgstr "Tidak"
+
+msgid "Uploading file is disabled in this folder"
+msgstr "Mengunggah file tidak diperbolehkan di folder ini"
+
+msgid ""
+"Unable to move \"%s\" to \"%s\", please make sure no same folder (with "
+"uppercase or lower case name) there."
+msgstr ""
+"Tidak dapat memindahkan \"%s\" ke \"%s\", pastikan tidak ada folder yang "
+"sama (dengan huruf besar atau kecil) disana."

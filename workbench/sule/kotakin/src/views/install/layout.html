@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Kotakin Installer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="Sulaeman <me@sulaeman.com>">
+
+        <!-- Le styles -->
+        <link href="{{ url_asset('packages/sule/kotakin/css/bootstrap.min.css') }}" media="screen" rel="stylesheet" />
+        <link href="{{ url_asset('packages/sule/kotakin/css/bootstrap-glyphicons.css') }}" media="screen" rel="stylesheet" />
+        <link href="{{ url_asset('packages/sule/kotakin/css/install.css') }}" media="screen" rel="stylesheet" />
+        
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            {{ html_script('http://html5shim.googlecode.com/svn/trunk/html5.js') }}
+        <![endif]-->
+
+        <!-- Le fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-144-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-114-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-72-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-57-precomposed.ico') }}">
+        <link rel="shortcut icon" href="{{ url_to_asset('packages/sule/kotakin/ico/favicon.ico') }}">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="clearfix mb30">
+                <ul class="nav navbar-nav">
+                    <li class="{% if menu == 'path' %}active{% else %}disabled{% endif %}"><a href="{{ url_to('/install') }}">1. Paths</a></li>
+                    <li class="{% if menu == 'db' %}active{% else %}disabled{% endif %}"><a href="{{ url_to('/install/db') }}">2. Database</a></li>
+                    <li class="{% if menu == 'user' %}active{% else %}disabled{% endif %}"><a href="{{ url_to('/install/user') }}">3. User</a></li>
+                    <li class="{% if menu == 'complete' %}active{% else %}disabled{% endif %}"><a href="{{ url_to('/install/complete') }}">Complete</a></li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+
+            {% block body %}{% endblock %}
+        </div>
+
+        <!-- Le scripts -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery-1.10.2.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/respond.min.js') }}"></script>
+    </body>
+</html>

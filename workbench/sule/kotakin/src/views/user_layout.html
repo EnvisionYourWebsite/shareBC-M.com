@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ page.title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="Sulaeman <me@sulaeman.com>">
+
+        <!-- Le styles -->
+        <link href="{{ url_asset('packages/sule/kotakin/css/bootstrap.min.css') }}" media="screen" rel="stylesheet" />
+        <link href="{{ url_asset('packages/sule/kotakin/css/bootstrap-glyphicons.css') }}" media="screen" rel="stylesheet" />
+        {% if not currentUser.isLoggedIn and noLoadSupersized is not defined %}
+        <link href="{{ url_asset('packages/sule/kotakin/css/supersized.core.css') }}" media="screen" rel="stylesheet" />
+        {% endif %}
+        <link href="{{ url_asset('packages/sule/kotakin/css/style.css') }}" media="screen" rel="stylesheet" />
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            {{ html_script('http://html5shim.googlecode.com/svn/trunk/html5.js') }}
+        <![endif]-->
+
+        {% if currentUser.isLoggedIn %}
+        <link rel="stylesheet" href="{{ url_asset('packages/sule/kotakin/css/jquery.fileupload-ui.css') }}">
+        <noscript><link rel="stylesheet" href="{{ url_asset('packages/sule/kotakin/css/jquery.fileupload-ui-noscript.css') }}"></noscript>
+        <link rel="stylesheet" href="{{ url_asset('packages/sule/kotakin/css/swipebox.css') }}">
+        <link href="{{ url_asset('packages/sule/kotakin/videojs/video-js.min.css') }}" rel="stylesheet">
+        {% endif %}
+
+        <!-- Le fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-144-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-114-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-72-precomposed.ico') }}">
+        <link rel="apple-touch-icon-precomposed" href="{{ url_to_asset('packages/sule/kotakin/ico/apple-touch-icon-57-precomposed.ico') }}">
+        <link rel="shortcut icon" href="{{ url_to_asset('packages/sule/kotakin/ico/favicon.ico') }}">
+
+        {% if page.getMetadata is not empty %}
+            {% for item in page.getMetadata %}
+                {{ item }}
+            {% endfor %}
+        {% endif %}
+    </head>
+
+    <body id="user-page">
+        <div class="top-pad visible-desktop">&nbsp;</div>
+        {% if currentUser is not null %}
+        <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_to('/%s') | format(page.userSlug) }}">{{ page.brand }}</a>
+                {% if currentUser.isLoggedIn %}
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="nav-collapse collapse bs-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li{% if page.isActiveMenu('dashboard') %} class="active"{% endif %}>
+                            <a href="{{ url_to('/%s') | format(page.userSlug) }}"><i class="glyphicon glyphicon-th-large glyphicon-white"></i> {{ _('Dashboard') }}</a>
+                        </li>
+                        <li{% if page.isActiveMenu('me') %} class="active"{% endif %}>
+                            <a href="{{ url_to('/%s/me') | format(page.userSlug) }}"><i class="glyphicon glyphicon-user glyphicon-white"></i> {{ _('My Account') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_to('/%s/logout') | format(page.userSlug) }}"><i class="glyphicon glyphicon-remove-sign glyphicon-white"></i> {{ _('Logout') }}</a>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% block body %}{% endblock %}
+
+        <div id="account-modal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ _('Session Information') }}</h4>
+                    </div>
+                    <div class="modal-body align_center">
+                        <div class="alert alert-info">{{ _('Your session might be expired, click "Continue" to re-login.') }}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">{{ _('Continue') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Le scripts -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery-1.10.2.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/respond.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.placeholder.js') }}"></script>
+
+        {% if currentUser.isLoggedIn %}
+        <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.ui.widget.js') }}"></script>
+        <!-- The Swipebox depedencies -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.isotope.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/ios-orientationchange-fix.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.swipebox.min.js') }}"></script>
+        <!-- The Templates plugin is included to render the upload/download listings -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/tmpl.min.js') }}"></script>
+        <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/load-image.min.js') }}"></script>
+        <!-- The Canvas to Blob plugin is included for image resizing functionality -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/canvas-to-blob.min.js') }}"></script>
+        <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.iframe-transport.js') }}"></script>
+        <!-- The basic File Upload plugin -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.fileupload.js') }}"></script>
+        <!-- The File Upload processing plugin -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.fileupload-process.js') }}"></script>
+        <!-- The File Upload image preview & resize plugin -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.fileupload-image.js') }}"></script>
+        <!-- The File Upload audio preview plugin -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.fileupload-audio.js') }}"></script>
+        <!-- The File Upload video preview plugin -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.fileupload-video.js') }}"></script>
+        <!-- The File Upload validation plugin -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.fileupload-validate.js') }}"></script>
+        <!-- The File Upload user interface plugin -->
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.fileupload-ui.js') }}"></script>
+        <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
+        <!--[if gte IE 8]>
+        <script src="{{ url_asset('packages/sule/kotakin/js/jquery.xdr-transport.js') }}"></script>
+        <![endif]-->
+
+        <script src="{{ url_asset('packages/sule/kotakin/audiojs/audio.min.js') }}"></script>
+        <script src="{{ url_asset('packages/sule/kotakin/videojs/video.js') }}"></script>
+
+        <script src="{{ url_asset('packages/sule/kotakin/js/kotakin.js') }}"></script>
+        {% else %}
+            {% if noLoadSupersized is not defined %}
+            <script src="{{ url_asset('packages/sule/kotakin/js/supersized.core.3.2.1.min.js') }}"></script>
+            {% endif %}
+        {% endif %}
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('input, textarea').placeholder();
+            });
+        </script>
+        
+        {% if page.getMetadata('footer') is not empty %}
+            {% for item in page.getMetadata('footer') %}
+                {{ item }}
+            {% endfor %}
+        {% endif %}
+
+        {% if page.config('ga_code') is not empty %}
+        <!-- Google Analytics -->
+        <script>
+          var _gaq=[['_setAccount','{{ page.config('ga_code') }}'],['_trackPageview']];
+          (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+          g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+          s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+        <!-- End Google Analytics -->
+        {% endif %}
+    </body>
+</html>

@@ -1,0 +1,135 @@
+{% extends "kotakin::admin_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="collection-header">
+            <div class="browse-actions row  mb10">
+                <div class="col-lg-6">
+                    <h4 class="modal-title">{{ _('Search - %d results') | format(total) }}</h4>
+                </div>
+                <div class="col-lg-6 align_right">
+                    {{ form_open({'url': url_to('/admin/search'), 'method': 'GET', 'class': 'clearfix'}) }}
+                    <div class="input-group pull-right">
+                        <input type="text" id="search" name="q" value="{{ keywords }}" class="form-control input-small" placeholder="{{ _('Search folders & files') }}">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default btn-small" type="button">{{ _('search') }}</button>
+                        </span>
+                    </div>
+                    {{ form_close() }}
+                </div>
+            </div>
+            <div class="collection-table-head">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-icon"></th>
+                            <th class="col-name">{{ _('Name') }}</th>
+                            <th class="col-kind">{{ _('Location') }}</th>
+                            <th class="col-modified">{{ _('Modified') }}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="collection-body">
+            <table class="table table-hover">
+                <tbody class="browse-items">
+                {% if result is not empty %}
+                    {% for item in result %}
+                    <tr>
+                        <td class="col-icon">
+                            {% if item.isFile %}
+                            <img src="{{ url_to(item.object.file.thumb('50x50').permalink) }}" alt="" />
+                            {% else %}
+                            <img src="{{ url_asset('/packages/sule/kotakin/img/icons/folder.png') }}" alt="" />
+                            {% endif %}
+                        </td>
+                        <td class="col-name">
+                            {% if item.isFile %}
+                                {% if item.object.file.width > 0 %}
+                                <a href="{{ url_to(item.object.file.thumb('800x800').permalink) }}" title="{{ item.object.name | replace('"', "'") }}" class="img-swipebox">{{ item.object.name }}<img src="{{ item.object.file.thumb('25x25').permalink }}" class="hidden"></a>
+                                {% elseif item.object.file.extension in ['pdf','txt'] %}
+                                <a href="#item-view-{{ item.id }}" title="{{ item.object.name | replace('"', "'") }}" class="file-view-popup" role="button" data-toggle="modal">{{ item.object.name }}</a>
+                                {% else %}
+                                <a href="#item-pop-{{ item.id }}" title="{{ item.object.name | replace('"', "'") }}" class="file-popup" role="button" data-toggle="modal">{{ item.object.name }}</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ url_to('/admin/%s') | format(item.object.permalink) }}" title="{{ item.object.name | replace('"', "'") }}">{{ item.object.name }}</a>
+                            {% endif %}
+                        </td>
+                        <td class="col-kind">
+                            {% if item.isFile %}
+                                {% set slug = '/' ~ item.object.location %}
+                                {% if slug | length > 20 %}
+                                {% set slug = '...' ~ slug | slice(slug | length - 20, slug | length) %}
+                                {% endif %}
+                                <a href="{{ url_to('/admin/%s') | format(item.object.locationPermalink) }}" title="{{ item.object.location }}">{{ slug }}</a>
+                            {% else %}
+                                {% set slug = '/' ~ item.object.slug %}
+                                {% if slug | length > 20 %}
+                                {% set slug = '...' ~ slug | slice(slug | length - 20, slug | length) %}
+                                {% endif %}
+                                <a href="{{ url_to('/admin/%s') | format(item.object.permalink) }}" title="{{ item.object.slug }}">{{ slug }}</a>
+                            {% endif %}
+                        </td>
+                        <td class="col-modified">
+                            {% if item.object.updatedAt > 0 %}
+                            {{ item.object.updatedAt | date(currentUser.dateFormat) }}
+                            {% endif %}
+
+                            {% if item.object.file.extension in ['pdf','txt'] %}
+                            <div id="item-view-{{ item.id }}" class="modal fade view-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            <h4 class="modal-title">{{ item.object.name }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <iframe src="{{ url_to('/blank') }}" frameborder="0" class="view-iframe" data-opened="0"></iframe>
+                                            <input type="hidden" name="item" class="view-item-slug" value="{{ item.object.slug }}" />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ url_to('/admin/%s') | format(item.object.downloadPermalink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-download glyphicon-white"></i> {{ _('Download') }}</a>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div id="item-pop-{{ item.id }}" class="modal fade pop-modal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                            <h4 class="modal-title">{{ item.object.name }}</h4>
+                                        </div>
+                                        <div class="modal-body align_center">
+                                            <img src="{{ url_to(item.object.file.thumb('100x100').permalink) }}" alt="" class="mt30 mb10" width="100" />
+                                            <br/>
+                                            <strong>{{ item.object.kind }}</strong>
+                                            <p>{{ item.object.createdAt | date(currentUser.dateFormat) }} - {{ item.object.file.size }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ url_to('/admin/%s') | format(item.object.downloadPermalink) }}" class="btn btn-primary"><i class="glyphicon glyphicon-download glyphicon-white"></i> {{ _('Download') }}</a>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

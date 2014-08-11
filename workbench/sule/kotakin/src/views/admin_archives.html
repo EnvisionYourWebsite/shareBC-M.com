@@ -1,0 +1,50 @@
+{% extends "kotakin::admin_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="page-header">
+            <h4 class="modal-title">{{ _('Archives') }}</h4>
+        </div>
+        <p><blockquote>{{ _('Following is the list of archive created when downloading folder. Please delete the old archive (more than 1 day old) to reduce your used disk space.') }}</blockquote></p>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-checkbox">#</th>
+                    <th>{{ _('Filename') }}</th>
+                    <th>{{ _('Created By') }}</th>
+                    <th>{{ _('Date') }}</th>
+                    <th class="col-action"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if archives is not empty %}
+                {% for index, file in archives %}
+                <tr>
+                    <td class="col-checkbox">{{ index + 1 }}</td>
+                    <td>{{ file.title }}</td>
+                    <td>{{ file.author.name }}</td>
+                    <td>{{ file.createdAt | date(currentUser.dateFormat) }}</td>
+                    <td class="col-action">
+                        <a href="{{ url_to('/admin/preference/archive/%s?action=delete') | format(file.id) }}" class="btn btn-small btn-primary"><i class="glyphicon glyphicon-trash glyphicon-white"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5">
+                        <div class="alert alert-info alert-block align_center">
+                            {{ _('No archive created at this moment.') }}
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

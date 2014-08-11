@@ -1,0 +1,78 @@
+/*
+ * This file is part of the Kotakin
+ *
+ * Author: Sulaeman <me@sulaeman.com>.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.fleft {float:left !important;}
+.fright {float:right !important;}
+.absPos {position:absolute !important;}
+.relPos {position:relative !important;}
+.hidden {display:none !important;}
+.block {display:block !important;}
+.inline {display:inline !important;}
+.flowHide {overflow:hidden !important;}
+.align_left {text-align:left !important;}
+.align_center {text-align:center !important;}
+.align_right {text-align:right !important;}
+.txtUpCase {text-transform:uppercase !important;}
+.txtUnderlined {text-decoration:underline !important;}
+.txtStriked {text-decoration:line-through !important;}
+.txtBold {font-weight:bold !important;}
+.txtItalic {font-style:italic !important;}
+.txtSmall {font-size:11px !important;line-height:1.2 !important;}
+.noBorders {border:0 none !important;}
+.noBg {background-image:url(none) !important;}
+.noMargins {margin:0 !important;;}
+.mt0 {margin-top:0 !important;;}
+.mt5 {margin-top:5px !important;;}
+.mt10 {margin-top:10px !important;;}
+.mt15 {margin-top:15px !important;;}
+.mt20 {margin-top:20px !important;;}
+.mt30 {margin-top:30px !important;;}
+.mb0 {margin-bottom:0 !important;;}
+.mb5 {margin-bottom:5px !important;;}
+.mb10 {margin-bottom:10px !important;;}
+.mb15 {margin-bottom:15px !important;;}
+.mb20 {margin-bottom:20px !important;;}
+.mb30 {margin-bottom:30px !important;;}
+.ml-auto {margin-left:auto !important;;}
+.ml0 {margin-left:0 !important;;}
+.ml5 {margin-left:5px !important;;}
+.ml10 {margin-left:10px !important;;}
+.ml20 {margin-left:20px !important;;}
+.ml30 {margin-left:30px !important;;}
+.mr-auto {margin-right:auto !important;;}
+.mr0 {margin-right:0 !important;;}
+.mr5 {margin-right:5px !important;;}
+.mr10 {margin-right:10px !important;;}
+.mr20 {margin-right:20px !important;;}
+.mr30 {margin-right:30px !important;;}
+.noPaddings {padding:0 !important;;}
+.pt0 {padding-top:0 !important;;}
+.pt2 {padding-top:2px !important;;}
+.pt5 {padding-top:5px !important;;}
+.pt10 {padding-top:10px !important;;}
+.pt15 {padding-top:15px !important;;}
+.pt20 {padding-top:20px !important;;}
+.pt30 {padding-top:30px !important;;}
+.pb0 {padding-bottom:0 !important;;}
+.pb5 {padding-bottom:5px !important;;}
+.pb10 {padding-bottom:10px !important;;}
+.pb20 {padding-bottom:20px !important;;}
+.pb30 {padding-bottom:30px !important;;}
+.pl0 {padding-left:0 !important;;}
+.pl5 {padding-left:5px !important;;}
+.pl10 {padding-left:10px !important;;}
+.pl15 {padding-left:15px !important;;}
+.pl20 {padding-left:20px !important;;}
+.pl30 {padding-left:30px !important;;}
+.pr0 {padding-right:0 !important;;}
+.pr5 {padding-right:5px !important;;}
+.pr10 {padding-right:10px !important;;}
+.pr15 {padding-right:15px !important;;}
+.pr20 {padding-right:20px !important;;}
+.pr30 {padding-right:30px !important;;}

@@ -1,0 +1,63 @@
+{% extends "kotakin::admin_layout" %}
+{% block body %}
+    <div class="container">
+        {% if session_has('success') %}
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('success') }}</div>
+        {% endif %}
+        {% if session_has('error') %}
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ session_get('error') }}</div>
+        {% endif %}
+
+        <div class="page-header">
+            <div class="browse-actions row">
+                <div class="col-lg-6">
+                    <h4 class="modal-title">{{ _('All User') }}</h4>
+                </div>
+                <div class="col-lg-6 align_right">
+                    <a href="{{ url_to('/admin/preference/user/0') }}" class="btn btn-primary btn-small"><i class="glyphicon glyphicon-plus glyphicon-white"></i> {{ _('New User') }}</a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-checkbox">#</th>
+                    <th>{{ _('Name') }}</th>
+                    <th>{{ _('Email') }}</th>
+                    <th>{{ _('Access') }}</th>
+                    <th>{{ _('Last Login') }}</th>
+                    <th class="col-action"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, user in page.users %}
+                <tr>
+                    <td class="col-checkbox">{{ index + 1 }}</td>
+                    <td><a href="{{ url_to(user.editPermalink) }}" title="{{ _('Edit') }}">{{ user.name }}</a></td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.group.name }}</td>
+                    <td>{% if user.lastLogin is not empty %}{{ user.lastLogin | date('Y/m/d H:i A') }}{% else %}-{% endif %}</td>
+                    <td class="col-action">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-th-list"></i> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_to('/admin/preference/user/%d') | format(user.id) }}">{{ _('Edit') }}</a></li>
+                                {% if not user.inGroup('Super Admin') %}
+                                <li class="divider"></li>
+                                {% if user.isActivated %}
+                                <li><a href="{{ url_to('/admin/preference/user/%d?action=deactivate') | format(user.id) }}">{{ _('Deactivate') }}</a></li>
+                                {% else %}
+                                <li><a href="{{ url_to('/admin/preference/user/%d?action=activate') | format(user.id) }}">{{ _('Activate') }}</a></li>
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="{{ url_to('/admin/preference/user/%d?action=delete') | format(user.id) }}">{{ _('Delete') }}</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
